@@ -1,0 +1,1603 @@
+<!doctype html>
+<html lang="th" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนสมาชิก - กลุ่มเพื่อนภูกระดึง</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Prompt', sans-serif; }
+    html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+    
+    .gradient-bg {
+      background: linear-gradient(180deg, rgba(135, 206, 235, 0.4) 0%, rgba(224, 246, 255, 0.3) 35%, rgba(245, 222, 179, 0.2) 65%, rgba(144, 238, 144, 0.15) 100%),
+                  url('https://www.dasta.or.th/uploads/article/202107/1625238812_bf3b710888a73246b84a.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+    }
+    
+    .card-shadow {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .input-focus:focus {
+      box-shadow: 0 0 0 3px rgba(45, 90, 135, 0.3);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #2d5a87 0%, #3d7ab5 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(45, 90, 135, 0.4);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .table-row:hover {
+      background: rgba(45, 90, 135, 0.05);
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast {
+      animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .animate-bounce {
+      animation: bounce 0.6s infinite;
+    }
+    
+    .sun-container {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .sun {
+      width: 25px;
+      height: 25px;
+      background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+      border-radius: 50%;
+      box-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 165, 0, 0.4);
+      animation: sunBounce 3s ease-in-out infinite;
+      position: relative;
+    }
+    
+    .sun::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 4px;
+      background: #FFD700;
+      border-radius: 2px;
+    }
+    
+    .sun::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 4px;
+      background: #FFD700;
+      border-radius: 2px;
+    }
+    
+    .sun-ray {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    
+    .sun-ray::before,
+    .sun-ray::after {
+      content: '';
+      position: absolute;
+      background: #FFD700;
+    }
+    
+    .sun-ray:nth-child(1) {
+      animation: rotateSun 20s linear infinite;
+    }
+    
+    .sun-ray:nth-child(1)::before {
+      width: 2px;
+      height: 5px;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 1px;
+    }
+    
+    .sun-ray:nth-child(1)::after {
+      width: 2px;
+      height: 5px;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 1px;
+    }
+    
+    .sun-ray:nth-child(2) {
+      animation: rotateSun 20s linear infinite reverse;
+    }
+    
+    .sun-ray:nth-child(2)::before {
+      width: 5px;
+      height: 2px;
+      left: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 1px;
+    }
+    
+    .sun-ray:nth-child(2)::after {
+      width: 5px;
+      height: 2px;
+      right: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 1px;
+    }
+    
+    @keyframes sunBounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    @keyframes rotateSun {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .mountain-logo {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0;
+      height: 20px;
+      position: relative;
+    }
+    
+    .mountain {
+      width: 0;
+      height: 0;
+      border-left: 7.5px solid transparent;
+      border-right: 7.5px solid transparent;
+      border-bottom: 15px solid;
+      position: relative;
+    }
+    
+    .mountain:nth-child(1) {
+      border-bottom-color: #8B6F47;
+      margin-right: -5px;
+      z-index: 1;
+    }
+    
+    .mountain:nth-child(2) {
+      border-bottom-color: #6B5836;
+      z-index: 2;
+    }
+    
+    .mountain:nth-child(3) {
+      border-bottom-color: #A0826D;
+      margin-left: -5px;
+      z-index: 1;
+    }
+    
+    .mountain-snow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 6px solid white;
+      bottom: 6px;
+      left: 4px;
+    }
+
+    .label-with-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .required-badge {
+      color: #ef4444;
+      font-weight: bold;
+      font-size: 0.875rem;
+    }
+
+    .required-note {
+      color: #9ca3af;
+      font-size: 0.75rem;
+    }
+
+    .main-title {
+      color: #2563eb;
+      font-weight: bold;
+      text-shadow: 3px 3px 8px rgba(37, 99, 235, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .welcome-banner {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
+      animation: slideInUp 0.8s ease-out, float 3s ease-in-out infinite;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      50% {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .welcome-heading {
+      color: #1e40af;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(30, 64, 175, 0.2);
+      animation: slideInDown 0.8s ease-out 0.2s backwards;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-text {
+      color: #be185d;
+      animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-emoji {
+      animation: bounce 0.8s ease-out 0.1s backwards, pulse 2s ease-in-out infinite 0.8s;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .image-upload-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+    }
+
+    .profile-preview {
+      width: 140px;
+      height: 140px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 4px solid #3d7ab5;
+      box-shadow: 0 8px 20px rgba(45, 90, 135, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .image-upload-container:hover .profile-preview {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(45, 90, 135, 0.4);
+    }
+
+    .upload-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(45, 90, 135, 0.7);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .upload-btn-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border: none;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 28px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      padding: 0;
+    }
+
+    .upload-btn-icon:hover {
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.5);
+    }
+
+    .upload-btn-icon:active {
+      transform: translateY(-1px) scale(1.04);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .clear-image-btn {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .image-upload-container.has-image .clear-image-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .clear-image-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.6);
+    }
+
+    .clear-image-btn:active {
+      transform: scale(0.95);
+    }
+
+    .image-info-text {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 12px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .upload-label-text {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-top: 8px;
+    }
+
+    .gender-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: 0.75rem;
+      border: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .gender-badge.male {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+    }
+
+    .gender-badge.male::before {
+      content: '♂';
+      font-size: 1.125rem;
+      margin-right: 0.25rem;
+    }
+
+    .gender-badge.female {
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+      color: white;
+    }
+
+    .gender-badge.female::before {
+      content: '♀';
+      font-size: 1.125rem;
+      margin-right: 0.25rem;
+    }
+
+    .gender-badge-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      font-size: 1.125rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .gender-badge-inline.male {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+    }
+
+    .gender-badge-inline.male::before {
+      content: '♂';
+    }
+
+    .gender-badge-inline.female {
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+      color: white;
+    }
+
+    .gender-badge-inline.female::before {
+      content: '♀';
+    }
+
+    .gender-dropdown-wrapper {
+      position: relative;
+    }
+
+    #gender-dropdown-btn {
+      position: relative;
+      z-index: 10;
+    }
+
+    #gender-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 0.25rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      z-index: 20;
+    }
+
+    #gender-dropdown-menu.show {
+      display: block;
+    }
+
+    #gender-dropdown-menu.hidden {
+      display: none;
+    }
+
+    .gender-option {
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .gender-option:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .gender-option:first-child {
+      border-radius: 0.75rem 0.75rem 0 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .gender-option:last-child {
+      border-radius: 0 0 0.75rem 0.75rem;
+    }
+
+    .gender-option:not(:last-child):not(:first-child) {
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .search-highlight {
+      background: linear-gradient(120deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+      padding: 0 2px;
+    }
+
+    .empty-search-state {
+      text-center py-8;
+    }
+
+    .table-row.hidden {
+      display: none;
+    }
+
+    .filter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+      color: white;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .filter-badge::before {
+      content: '✓ ';
+      margin-right: 0.25rem;
+    }
+
+    .filter-gender-dropdown-wrapper {
+      position: relative;
+    }
+
+    #filter-gender-dropdown-btn {
+      position: relative;
+      z-index: 10;
+    }
+
+    #filter-gender-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 0.25rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      z-index: 20;
+    }
+
+    #filter-gender-dropdown-menu.show {
+      display: block;
+    }
+
+    #filter-gender-dropdown-menu.hidden {
+      display: none;
+    }
+
+    .filter-gender-option {
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .filter-gender-option:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .filter-gender-option:first-child {
+      border-radius: 0.75rem 0.75rem 0 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .filter-gender-option:last-child {
+      border-radius: 0 0 0.75rem 0.75rem;
+    }
+
+    .filter-gender-option:not(:last-child):not(:first-child) {
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .birthday-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      font-size: 0.75rem;
+      color: #7c3aed;
+      font-weight: 500;
+    }
+
+    .load-more-info {
+      text-center py-4 text-sm text-gray-500 font-medium;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full gradient-bg overflow-auto w-full">
+  <div class="w-full py-8 px-4">
+   <div class="max-w-7xl mx-auto">
+    <div class="mb-8 fade-in">
+     <div class="flex flex-col items-start gap-2 mb-8">
+      <div class="flex-shrink-0">
+       <div class="inline-flex flex-row items-end gap-1.5">
+        <div class="sun-container">
+         <div class="sun">
+          <div class="sun-ray"></div>
+          <div class="sun-ray"></div>
+         </div>
+        </div>
+        <div class="mountain-logo">
+         <div class="mountain">
+          <div class="mountain-snow"></div>
+         </div>
+         <div class="mountain">
+          <div class="mountain-snow"></div>
+         </div>
+         <div class="mountain">
+          <div class="mountain-snow"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="flex flex-col">
+       <h1 class="text-2xl md:text-3xl main-title text-left">กลุ่มเพื่อนภูกระดึง</h1>
+       <p class="text-rose-600 text-sm md:text-base text-left font-medium">ระบบลงทะเบียนสมาชิก</p>
+      </div>
+     </div>
+     <div class="welcome-banner rounded-2xl p-4 md:p-5 shadow-lg mb-8">
+      <div class="flex items-start gap-3">
+       <div class="text-3xl flex-shrink-0 welcome-emoji">
+        🎉
+       </div>
+       <div class="flex-1">
+        <h2 class="text-lg md:text-xl welcome-heading mb-2">ยินดีต้อนรับ!</h2>
+        <p class="welcome-text text-sm md:text-base leading-relaxed">สวัสดีค่ะ! ยินดีต้อนรับสู่ระบบสมาชิกกลุ่มเพื่อนภูกระดึง ! <span class="block mt-1.5">ที่นี่คือที่รวมข้อมูลเพื่อนๆ กรุณาบันทึกข้อมูลเพื่อน แล้วอัปโหลดรูปสวยๆ ได้นะคะ 💚</span></p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <div id="delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-overlay">
+     <div class="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-2xl fade-in">
+      <div class="text-center">
+       <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-3xl">🗑️</span>
+       </div>
+       <h3 class="text-xl font-bold text-gray-800 mb-2">ยืนยันการลบข้อมูล</h3>
+       <p id="delete-message" class="text-gray-600 mb-2 font-medium">คุณต้องการลบข้อมูลสมาชิกนี้หรือไม่?</p>
+       <p class="text-sm text-gray-500 mb-6">การกระทำนี้ไม่สามารถยกเลิกได้</p>
+       <div class="flex gap-3 justify-center"><button onclick="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors">ยกเลิก</button> <button id="confirm-delete-btn" class="px-6 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors flex items-center gap-2"> <span id="delete-spinner" class="spinner hidden"></span> <span id="delete-btn-text">ลบข้อมูล</span> </button>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-overlay">
+     <div class="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-2xl fade-in">
+      <div class="text-center">
+       <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"><span class="text-4xl">✓</span>
+       </div>
+       <h3 id="success-title" class="text-2xl font-bold text-gray-800 mb-2">สำเร็จ!</h3>
+       <p id="success-message" class="text-gray-600 mb-6">ข้อมูลถูกบันทึกเรียบร้อยแล้ว</p><button onclick="closeSuccessModal()" class="w-full px-6 py-2.5 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600 transition-colors">ตกลง</button>
+      </div>
+     </div>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-6">
+     <div class="bg-white rounded-2xl card-shadow p-6 fade-in">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">📝</span> <span id="form-mode-title">เพิ่มสมาชิกใหม่</span></h2>
+      <form id="member-form" class="space-y-4"><input type="hidden" id="member-id" value="">
+       <div class="mb-6">
+        <div class="flex justify-center items-center gap-6">
+         <div class="flex flex-col items-center"><label for="profile-image" class="upload-btn-icon" title="เลือกรูปจากอุปกรณ์"> 🖼️ </label> <span class="upload-label-text">เลือกรูป</span>
+         </div>
+         <div class="image-upload-container"><img id="profile-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%239ca3af'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='22' fill='%239ca3af'/%3E%3C/svg%3E" alt="Profile" class="profile-preview">
+          <div class="upload-overlay"></div><button type="button" class="clear-image-btn" id="clear-btn" onclick="clearProfileImage()" title="ลบรูปภาพ">✕</button>
+         </div>
+         <div class="flex flex-col items-center"><label for="camera-input" class="upload-btn-icon" title="ถ่ายรูปใหม่"> 📸 </label> <span class="upload-label-text">ถ่ายรูป</span>
+         </div>
+        </div><input type="file" id="profile-image" accept="image/*" class="hidden" onchange="previewImage(this)"> <input type="file" id="camera-input" accept="image/*" capture="environment" class="hidden" onchange="previewImage(this)">
+        <p class="image-info-text">คลิกปุ่มเพื่ออัปโหลดรูปโปรไฟล์</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4">
+        <div>
+         <div class="label-with-badge"><label for="firstName" class="block text-sm font-medium text-gray-700">ชื่อ</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div><input type="text" id="firstName" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" placeholder="ชื่อจริง">
+        </div>
+        <div>
+         <div class="label-with-badge"><label for="lastName" class="block text-sm font-medium text-gray-700">นามสกุล</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div><input type="text" id="lastName" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" placeholder="นามสกุล">
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4">
+        <div>
+         <div class="label-with-badge"><label for="nickname" class="block text-sm font-medium text-gray-700">ชื่อเล่น</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div><input type="text" id="nickname" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" placeholder="ชื่อเล่น">
+        </div>
+        <div>
+         <div class="label-with-badge"><label for="gender" class="block text-sm font-medium text-gray-700">เพศ</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div>
+         <div class="gender-dropdown-wrapper">
+          <button type="button" id="gender-dropdown-btn" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-left flex items-center justify-between"> <span id="gender-display">-- เลือกเพศ --</span> <span class="text-gray-400">▼</span> </button>
+          <div id="gender-dropdown-menu" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
+           <button type="button" class="gender-option w-full px-4 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3" data-value="" style="border-radius: 0.75rem 0.75rem 0 0; border-bottom: 1px solid #f3f4f6;"> <span class="text-gray-500">-- เลือกเพศ --</span> </button> <button type="button" class="gender-option w-full px-4 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3" data-value="ชาย" style="border-bottom: 1px solid #f3f4f6;">
+            <div class="gender-badge-inline male" style="width: 28px; height: 28px;"></div><span class="text-gray-800">ชาย</span> </button> <button type="button" class="gender-option w-full px-4 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3" data-value="หญิง" style="border-radius: 0 0 0.75rem 0.75rem;">
+            <div class="gender-badge-inline female" style="width: 28px; height: 28px;"></div><span class="text-gray-800">หญิง</span> </button>
+          </div><input type="hidden" id="gender" value="">
+         </div>
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4">
+        <div>
+         <div class="label-with-badge"><label for="birthday" class="block text-sm font-medium text-gray-700">วันเกิด</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div><input type="date" id="birthday" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all">
+        </div>
+        <div>
+         <div class="label-with-badge"><label for="phone" class="block text-sm font-medium text-gray-700">เบอร์โทร</label> <span class="required-badge">*</span> <span class="required-note">บังคับ</span>
+         </div><input type="tel" id="phone" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" placeholder="081-2345-678" oninput="formatPhoneNumber(this)" maxlength="12">
+        </div>
+       </div>
+       <div><label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="email" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" placeholder="example@email.com">
+       </div>
+<div>
+<label for="LineID" class="block text-sm font-medium text-gray-700 mb-1">
+Line ID (ถ้าต้องการให้ติดต่อผ่าน LINE)
+</label>
+<input type="text"
+id="LineID"
+name="LineID"
+class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all"
+placeholder="yourlineid">
+</div>
+       <div class="flex gap-3 pt-4"><button type="submit" id="submit-btn" class="flex-1 btn-primary text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2"> <span id="submit-spinner" class="spinner hidden"></span> <span id="submit-btn-text">💾 บันทึกข้อมูล</span> </button> <button type="button" onclick="resetForm()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors">🔄 ล้างฟอร์ม</button>
+       </div>
+      </form>
+     </div>
+     <div class="bg-white rounded-2xl card-shadow p-6 fade-in">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">👥</span> รายชื่อสมาชิก</h2><button onclick="loadMembers()" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors" title="รีเฟรช">🔄</button>
+      </div>
+      <div class="mb-6">
+       <div class="relative mb-4">
+        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+         🔍
+        </div><input type="text" id="search-input" placeholder="ค้นหาด้วยชื่อ หรือ ชื่อเล่น..." class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" oninput="filterMembers()"> <button onclick="clearSearch()" id="clear-search-btn" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors hidden" title="ล้างการค้นหา">✕</button>
+       </div>
+       <div class="grid md:grid-cols-2 gap-3 mb-4">
+        <div>
+         <label class="block text-xs font-semibold text-gray-600 mb-2">🚻 กรองตามเพศ</label>
+         <div class="filter-gender-dropdown-wrapper">
+          <button type="button" id="filter-gender-dropdown-btn" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-left flex items-center justify-between text-sm"> <span id="filter-gender-display">ทั้งหมด</span> <span class="text-gray-400">▼</span> </button>
+          <div id="filter-gender-dropdown-menu" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
+           <button type="button" class="filter-gender-option w-full px-3 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3 text-sm" data-value="" style="border-radius: 0.75rem 0.75rem 0 0; border-bottom: 1px solid #f3f4f6;"> <span class="text-gray-500">ทั้งหมด</span> </button> <button type="button" class="filter-gender-option w-full px-3 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3 text-sm" data-value="ชาย" style="border-bottom: 1px solid #f3f4f6;">
+            <div class="gender-badge-inline male" style="width: 24px; height: 24px;"></div><span class="text-gray-800">ชาย</span> </button> <button type="button" class="filter-gender-option w-full px-3 py-2.5 text-left hover:bg-blue-50 transition-colors flex items-center gap-3 text-sm" data-value="หญิง" style="border-radius: 0 0 0.75rem 0.75rem;">
+            <div class="gender-badge-inline female" style="width: 24px; height: 24px;"></div><span class="text-gray-800">หญิง</span> </button>
+          </div><input type="hidden" id="filter-gender" value="">
+         </div>
+        </div>
+        <div><label for="filter-month" class="block text-xs font-semibold text-gray-600 mb-2">🎂 กรองตามเดือนเกิด</label> <select id="filter-month" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-sm" onchange="filterMembers()"> <option value="">ทั้งปี</option> <option value="1">มกราคม</option> <option value="2">กุมภาพันธ์</option> <option value="3">มีนาคม</option> <option value="4">เมษายน</option> <option value="5">พฤษภาคม</option> <option value="6">มิถุนายน</option> <option value="7">กรกฎาคม</option> <option value="8">สิงหาคม</option> <option value="9">กันยายน</option> <option value="10">ตุลาคม</option> <option value="11">พฤศจิกายน</option> <option value="12">ธันวาคม</option> </select>
+        </div>
+       </div>
+       <div id="search-info" class="mt-2 text-sm text-gray-500 hidden">
+        พบ <span id="search-count" class="font-semibold text-blue-600">0</span> รายการ (แสดง 10 รายการล่าสุด)
+       </div>
+       <div id="filter-info" class="mt-3 flex flex-wrap gap-2 items-center text-sm hidden"><span class="text-gray-600">🔎 ตัวกรองที่ใช้:</span>
+        <div id="active-filters"></div>
+       </div>
+      </div>
+      <div id="loading-state" class="text-center py-12">
+       <div class="spinner mx-auto mb-4" style="border-color: rgba(45, 90, 135, 0.2); border-top-color: #2d5a87; width: 40px; height: 40px;"></div>
+       <p class="text-gray-500">กำลังโหลดข้อมูล...</p>
+      </div>
+      <div id="empty-state" class="text-center py-12 hidden">
+       <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-4xl">📭</span>
+       </div>
+       <p class="text-gray-500">ยังไม่มีข้อมูลสมาชิก</p>
+      </div>
+      <div id="no-search-results" class="text-center py-12 hidden">
+       <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-4xl">🔍</span>
+       </div>
+       <p class="text-gray-600 font-medium">ไม่พบผลการค้นหา</p>
+       <p class="text-gray-500 text-sm mt-2">ลองค้นหาด้วยชื่อหรือชื่อเล่นอื่น</p>
+      </div>
+      <div id="members-container" class="hidden overflow-x-auto">
+       <table class="w-full">
+        <thead>
+         <tr class="border-b border-gray-200">
+          <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">รูป</th>
+          <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">ชื่อเล่น</th>
+          <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">เบอร์โทร</th>
+          <th class="text-left py-3 px-2 text-sm font-semibold text-gray-600">วันเกิด</th>
+          <th class="text-center py-3 px-2 text-sm font-semibold text-gray-600">จัดการ</th>
+         </tr>
+        </thead>
+        <tbody id="members-list"></tbody>
+       </table>
+       <div id="load-more-info" class="load-more-info hidden"></div>
+      </div>
+      <div id="stats" class="mt-6 pt-4 border-t border-gray-100 hidden">
+       <p class="text-sm text-gray-500">จำนวนสมาชิกทั้งหมด: <span id="total-members" class="font-semibold text-blue-600">0</span> คน</p>
+       <p id="search-stats" class="text-sm text-gray-500 mt-1 hidden">แสดง: <span id="displayed-members" class="font-semibold text-blue-600">0</span> / <span id="total-search-members" class="font-semibold">0</span> คน</p>
+      </div>
+     </div>
+    </div>
+    <div class="text-center mt-8 text-white text-sm drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+     <p>© 2024 กลุ่มเพื่อนภูกระดึง - ระบบจัดการสมาชิก</p>
+    </div>
+   </div>
+  </div>
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyM6Z7vSkpZlBuMybV9qu1Hn6WRkpIX7XvmD4l3T6QS_H8to6Tg_qPasts0fd1eX-sD/exec';
+    
+    let members = [];
+    let deleteTargetId = null;
+    let currentImageBase64 = null;
+    let currentImageName = null;
+    let currentImageType = null;
+    let hasProfileImage = false;
+    let searchQuery = '';
+    let filterGender = '';
+    let filterMonth = '';
+
+    const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+
+    // Gender dropdown functionality (Form)
+    const genderDropdownBtn = document.getElementById('gender-dropdown-btn');
+    const genderDropdownMenu = document.getElementById('gender-dropdown-menu');
+    const genderOptions = document.querySelectorAll('.gender-option');
+    const genderInput = document.getElementById('gender');
+    const genderDisplay = document.getElementById('gender-display');
+
+    genderDropdownBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      genderDropdownMenu.classList.toggle('hidden');
+    });
+
+    genderOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        const value = this.getAttribute('data-value');
+        genderInput.value = value;
+        
+        if (value === '') {
+          genderDisplay.textContent = '-- เลือกเพศ --';
+        } else if (value === 'ชาย') {
+          genderDisplay.innerHTML = '<div class="gender-badge-inline male" style="width: 24px; height: 24px; margin-right: 0.5rem;"></div><span>ชาย</span>';
+        } else if (value === 'หญิง') {
+          genderDisplay.innerHTML = '<div class="gender-badge-inline female" style="width: 24px; height: 24px; margin-right: 0.5rem;"></div><span>หญิง</span>';
+        }
+        
+        genderDropdownMenu.classList.add('hidden');
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.gender-dropdown-wrapper')) {
+        genderDropdownMenu.classList.add('hidden');
+      }
+    });
+
+    // Filter Gender dropdown functionality
+    const filterGenderDropdownBtn = document.getElementById('filter-gender-dropdown-btn');
+    const filterGenderDropdownMenu = document.getElementById('filter-gender-dropdown-menu');
+    const filterGenderOptions = document.querySelectorAll('.filter-gender-option');
+    const filterGenderInput = document.getElementById('filter-gender');
+    const filterGenderDisplay = document.getElementById('filter-gender-display');
+
+    filterGenderDropdownBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      filterGenderDropdownMenu.classList.toggle('hidden');
+    });
+
+    filterGenderOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        const value = this.getAttribute('data-value');
+        filterGenderInput.value = value;
+        
+        if (value === '') {
+          filterGenderDisplay.textContent = 'ทั้งหมด';
+        } else if (value === 'ชาย') {
+          filterGenderDisplay.innerHTML = '<div class="gender-badge-inline male" style="width: 20px; height: 20px; margin-right: 0.375rem;"></div><span>ชาย</span>';
+        } else if (value === 'หญิง') {
+          filterGenderDisplay.innerHTML = '<div class="gender-badge-inline female" style="width: 20px; height: 20px; margin-right: 0.375rem;"></div><span>หญิง</span>';
+        }
+        
+        filterGenderDropdownMenu.classList.add('hidden');
+        filterMembers();
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.filter-gender-dropdown-wrapper')) {
+        filterGenderDropdownMenu.classList.add('hidden');
+      }
+    });
+
+    function formatPhoneNumber(input) {
+      const phoneDigits = input.value.replace(/\D/g, '');
+      let formattedPhone = phoneDigits;
+      
+      if (phoneDigits.length > 0) {
+        if (phoneDigits.length <= 3) {
+          formattedPhone = phoneDigits;
+        } else if (phoneDigits.length <= 7) {
+          formattedPhone = phoneDigits.substring(0, 3) + '-' + phoneDigits.substring(3);
+        } else {
+          formattedPhone = phoneDigits.substring(0, 3) + '-' + phoneDigits.substring(3, 7) + '-' + phoneDigits.substring(7, 10);
+        }
+      }
+      
+      input.value = formattedPhone;
+    }
+
+    function convertDateToInputFormat(dateString) {
+      if (!dateString) return '';
+      
+      const dateStr = String(dateString).trim();
+      
+      try {
+        const dateObj = new Date(dateStr);
+        if (!isNaN(dateObj.getTime())) {
+          const year = dateObj.getFullYear();
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const day = String(dateObj.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        }
+      } catch (e) {}
+      
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        return dateStr;
+      }
+      
+      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateStr)) {
+        const [day, month, year] = dateStr.split('/');
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+      
+      if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateStr)) {
+        const [day, month, year] = dateStr.split('-');
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+      
+      if (/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(dateStr)) {
+        const [year, month, day] = dateStr.split('/');
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+      
+      if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateStr)) {
+        const [year, month, day] = dateStr.split('-');
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+      
+      return '';
+    }
+
+    function formatThaiDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    function showSuccessModal(title, message) {
+      document.getElementById('success-title').textContent = title;
+      document.getElementById('success-message').textContent = message;
+      document.getElementById('success-modal').classList.remove('hidden');
+      document.getElementById('success-modal').classList.add('flex');
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.add('hidden');
+      document.getElementById('success-modal').classList.remove('flex');
+      loadMembers();
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('delete-modal').classList.add('hidden');
+      document.getElementById('delete-modal').classList.remove('flex');
+      deleteTargetId = null;
+    }
+
+async function previewImage(input) {
+  if (!input.files || !input.files[0]) return;
+
+  const file = input.files[0];
+
+  // จำกัดขนาดไฟล์ดิบก่อน (กันไฟล์โหดเกินไป)
+  const MAX_RAW_SIZE = 10 * 1024 * 1024; // 10MB
+  if (file.size > MAX_RAW_SIZE) {
+    alert("ไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function (e) {
+    const img = new Image();
+    img.src = e.target.result;
+
+    img.onload = function () {
+
+      const MAX_WIDTH = 1600;
+      const MAX_HEIGHT = 1600;
+
+      let width = img.width;
+      let height = img.height;
+
+      // ปรับขนาดถ้าเกิน
+      if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+        const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+        width = width * ratio;
+        height = height * ratio;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // บีบคุณภาพ 0.8 (บาลานซ์ดี ไม่แตกง่าย)
+      const compressedBase64 = canvas.toDataURL("image/jpeg", 0.8);
+
+      // เช็คขนาดหลังบีบ (ไม่เกิน 1MB)
+      const base64Data = compressedBase64.split(",")[1];
+      const byteSize = Math.ceil((base64Data.length * 3) / 4);
+
+      const MAX_FINAL_SIZE = 1 * 1024 * 1024; // 1MB
+
+      if (byteSize > MAX_FINAL_SIZE) {
+        alert("รูปยังมีขนาดใหญ่เกินไปหลังบีบ กรุณาเลือกรูปที่เล็กลง");
+        input.value = "";
+        return;
+      }
+
+      // แสดง preview
+      document.getElementById("profile-preview").src = compressedBase64;
+
+      // เก็บค่าที่จะส่งไป Apps Script
+      currentImageBase64 = base64Data;
+      currentImageName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+      currentImageType = "image/jpeg";
+      hasProfileImage = true;
+
+      document.getElementById("clear-btn").classList.add("has-image");
+      document.querySelector(".image-upload-container").classList.add("has-image");
+    };
+  };
+
+  reader.readAsDataURL(file);
+}
+
+
+
+    function clearProfileImage() {
+      document.getElementById('profile-preview').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%239ca3af'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='22' fill='%239ca3af'/%3E%3C/svg%3E";
+      document.getElementById('profile-image').value = '';
+      document.getElementById('camera-input').value = '';
+      currentImageBase64 = null;
+      currentImageName = null;
+      currentImageType = null;
+      hasProfileImage = false;
+      document.getElementById('clear-btn').classList.remove('has-image');
+      document.querySelector('.image-upload-container').classList.remove('has-image');
+    }
+
+    async function loadMembers() {
+      const loadingState = document.getElementById('loading-state');
+      const emptyState = document.getElementById('empty-state');
+      const membersContainer = document.getElementById('members-container');
+      const stats = document.getElementById('stats');
+      const noSearchResults = document.getElementById('no-search-results');
+
+      loadingState.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      membersContainer.classList.add('hidden');
+      stats.classList.add('hidden');
+      noSearchResults.classList.add('hidden');
+
+      try {
+        const response = await fetch(`${API_URL}?action=read`);
+        const text = await response.text();
+        
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          loadingState.classList.add('hidden');
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        loadingState.classList.add('hidden');
+
+        if (data.status === 'success' && data.data && data.data.length > 0) {
+          members = data.data;
+          searchQuery = '';
+          filterGender = '';
+          filterMonth = '';
+          document.getElementById('search-input').value = '';
+          filterGenderInput.value = '';
+          filterGenderDisplay.textContent = 'ทั้งหมด';
+          document.getElementById('filter-month').value = '';
+          document.getElementById('clear-search-btn').classList.add('hidden');
+          document.getElementById('search-info').classList.add('hidden');
+          document.getElementById('filter-info').classList.add('hidden');
+          renderMembers();
+          membersContainer.classList.remove('hidden');
+          stats.classList.remove('hidden');
+          document.getElementById('total-members').textContent = members.length;
+          document.getElementById('search-stats').classList.add('hidden');
+        } else {
+          emptyState.classList.remove('hidden');
+          members = [];
+        }
+      } catch (error) {
+        console.error('Error loading members:', error);
+        loadingState.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+      }
+    }
+
+    function filterMembers() {
+      const searchInput = document.getElementById('search-input');
+      searchQuery = searchInput.value.trim().toLowerCase();
+      filterGender = filterGenderInput.value;
+      filterMonth = document.getElementById('filter-month').value;
+      
+      if (searchQuery.length > 0) {
+        document.getElementById('clear-search-btn').classList.remove('hidden');
+      } else {
+        document.getElementById('clear-search-btn').classList.add('hidden');
+      }
+
+      updateFilterInfo();
+      renderMembers();
+    }
+
+    function updateFilterInfo() {
+      const filterInfo = document.getElementById('filter-info');
+      const activeFilters = document.getElementById('active-filters');
+      activeFilters.innerHTML = '';
+      
+      let hasActiveFilters = false;
+
+      if (filterGender) {
+        const genderText = filterGender === 'ชาย' ? '♂ ชาย' : '♀ หญิง';
+        const badge = document.createElement('span');
+        badge.className = 'filter-badge';
+        badge.textContent = genderText;
+        activeFilters.appendChild(badge);
+        hasActiveFilters = true;
+      }
+
+      if (filterMonth) {
+        const monthNum = parseInt(filterMonth);
+        const monthText = monthNames[monthNum - 1];
+        const badge = document.createElement('span');
+        badge.className = 'filter-badge';
+        badge.textContent = '🎂 ' + monthText;
+        activeFilters.appendChild(badge);
+        hasActiveFilters = true;
+      }
+
+      if (hasActiveFilters) {
+        filterInfo.classList.remove('hidden');
+      } else {
+        filterInfo.classList.add('hidden');
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      searchQuery = '';
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      document.getElementById('search-info').classList.add('hidden');
+      renderMembers();
+    }
+
+    function renderMembers() {
+      const list = document.getElementById('members-list');
+      const noSearchResults = document.getElementById('no-search-results');
+      const loadMoreInfo = document.getElementById('load-more-info');
+      list.innerHTML = '';
+      loadMoreInfo.classList.add('hidden');
+
+      const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%239ca3af'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='22' fill='%239ca3af'/%3E%3C/svg%3E";
+
+      let filteredMembers = members.filter(member => {
+        // Search filter
+        let matchesSearch = true;
+        if (searchQuery.length > 0) {
+          const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+          const nickname = member.nickname.toLowerCase();
+          matchesSearch = fullName.includes(searchQuery) || nickname.includes(searchQuery);
+        }
+
+        // Gender filter
+        let matchesGender = true;
+        if (filterGender) {
+          matchesGender = member.gender === filterGender;
+        }
+
+        // Month filter
+        let matchesMonth = true;
+        if (filterMonth) {
+          const birthDate = new Date(member.birthday);
+          const birthMonth = birthDate.getMonth() + 1;
+          matchesMonth = birthMonth === parseInt(filterMonth);
+        }
+
+        return matchesSearch && matchesGender && matchesMonth;
+      });
+
+      // Sort by record date - latest first (but display birthday)
+      filteredMembers.sort((a, b) => {
+        const dateA = new Date(a.recordDate || '1900-01-01');
+        const dateB = new Date(b.recordDate || '1900-01-01');
+        return dateB - dateA;
+      });
+
+      if (filteredMembers.length === 0 && (searchQuery.length > 0 || filterGender || filterMonth)) {
+        noSearchResults.classList.remove('hidden');
+        document.getElementById('members-container').classList.add('hidden');
+        document.getElementById('search-info').classList.remove('hidden');
+        document.getElementById('search-count').textContent = '0';
+        return;
+      } else if (filteredMembers.length === 0 && !searchQuery && !filterGender && !filterMonth) {
+        return;
+      }
+
+      noSearchResults.classList.add('hidden');
+      document.getElementById('members-container').classList.remove('hidden');
+      document.getElementById('search-info').classList.remove('hidden');
+      document.getElementById('search-count').textContent = filteredMembers.length;
+
+      // Limit to latest 10 members for display performance
+      const totalFiltered = filteredMembers.length;
+      const displayMembers = filteredMembers.slice(0, 10);
+      const hasMore = totalFiltered > 10;
+
+      displayMembers.forEach((member, index) => {
+        const profileImg = member.profileImage || defaultAvatar;
+        
+        let formattedPhone = member.phone;
+        const phoneDigits = member.phone.replace(/\D/g, '');
+        if (phoneDigits.length === 10) {
+          formattedPhone = phoneDigits.substring(0, 3) + '-' + phoneDigits.substring(3, 7) + '-' + phoneDigits.substring(7);
+        }
+        
+        let genderBadge = '';
+        if (member.gender === 'ชาย') {
+          genderBadge = '<div class="gender-badge-inline male"></div>';
+        } else if (member.gender === 'หญิง') {
+          genderBadge = '<div class="gender-badge-inline female"></div>';
+        }
+        
+        let nicknamDisplay = member.nickname;
+        let fullNameDisplay = `${member.firstName} ${member.lastName}`;
+        
+        if (searchQuery.length > 0) {
+          const regex = new RegExp(`(${searchQuery})`, 'gi');
+          nicknamDisplay = member.nickname.replace(regex, '<span class="search-highlight">$1</span>');
+          fullNameDisplay = `${member.firstName} ${member.lastName}`.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+        
+        const realIndex = members.findIndex(m => m.id === member.id);
+        const thaiDate = formatThaiDate(member.birthday);
+        
+        const row = document.createElement('tr');
+        row.className = 'table-row border-b border-gray-100 transition-colors';
+        row.innerHTML = `
+          <td class="py-3 px-2">
+            <img src="${profileImg}" alt="${member.nickname}" class="w-10 h-10 rounded-full object-cover border-2 border-blue-200" onerror="this.src='${defaultAvatar}'">
+          </td>
+          <td class="py-3 px-2">
+            <div class="flex items-center gap-2">
+              ${genderBadge}
+              <div>
+                <p class="font-medium text-gray-800 text-sm">${fullNameDisplay}</p>
+                <p class="text-xs text-gray-500">${nicknamDisplay}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-sm font-medium border border-green-200">
+              <span>📱</span>
+              ${formattedPhone}
+            </span>
+          </td>
+          <td class="py-3 px-2">
+            <span class="birthday-badge">
+              🎂 ${thaiDate}
+            </span>
+          </td>
+          <td class="py-3 px-2">
+            <div class="flex items-center justify-center gap-1">
+              <button onclick="openEditModal(${realIndex})" class="p-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors" title="แก้ไข">
+                ✏️
+              </button>
+              <button onclick="openDeleteModal(${realIndex})" class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors" title="ลบ">
+                🗑️
+              </button>
+            </div>
+          </td>
+        `;
+        list.appendChild(row);
+      });
+
+      // Show load more info if there are more members
+      if (hasMore) {
+        loadMoreInfo.classList.remove('hidden');
+        loadMoreInfo.innerHTML = `<span style="color: #6b7280;">⚠️ แสดง 10 คนล่าสุด จากทั้งหมด ${totalFiltered} คน</span>`;
+      }
+
+      if (searchQuery.length > 0 || filterGender || filterMonth) {
+        document.getElementById('search-stats').classList.remove('hidden');
+        document.getElementById('displayed-members').textContent = Math.min(displayMembers.length, 10);
+        document.getElementById('total-search-members').textContent = totalFiltered;
+      }
+    }
+
+    function openEditModal(index) {
+      const member = members[index];
+      
+      document.getElementById('member-id').value = member.id;
+      document.getElementById('firstName').value = member.firstName;
+      document.getElementById('lastName').value = member.lastName;
+      document.getElementById('nickname').value = member.nickname;
+      genderInput.value = member.gender;
+      
+      if (member.gender === 'ชาย') {
+        genderDisplay.innerHTML = '<div class="gender-badge-inline male" style="width: 24px; height: 24px; margin-right: 0.5rem;"></div><span>ชาย</span>';
+      } else if (member.gender === 'หญิง') {
+        genderDisplay.innerHTML = '<div class="gender-badge-inline female" style="width: 24px; height: 24px; margin-right: 0.5rem;"></div><span>หญิง</span>';
+      } else {
+        genderDisplay.textContent = '-- เลือกเพศ --';
+      }
+      
+      const formattedDate = convertDateToInputFormat(member.birthday);
+      if (formattedDate) {
+        document.getElementById('birthday').value = formattedDate;
+      }
+      
+      document.getElementById('phone').value = member.phone;
+      document.getElementById('email').value = member.email;
+document.getElementById('LineID').value = member.lineId || '';
+      
+      if (member.profileImage) {
+        document.getElementById('profile-preview').src = member.profileImage;
+        document.querySelector('.image-upload-container').classList.add('has-image');
+      }
+      
+      document.getElementById('form-mode-title').textContent = 'แก้ไขข้อมูลสมาชิก';
+      document.getElementById('submit-btn-text').textContent = '💾 อัปเดตข้อมูล';
+      
+      document.querySelector('.bg-white.rounded-2xl.card-shadow').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openDeleteModal(index) {
+      const member = members[index];
+      deleteTargetId = member.id;
+      
+      document.getElementById('delete-message').textContent = 
+        `"${member.firstName} ${member.lastName} (${member.nickname})"`;
+      
+      document.getElementById('delete-modal').classList.remove('hidden');
+      document.getElementById('delete-modal').classList.add('flex');
+    }
+
+    document.getElementById('confirm-delete-btn').addEventListener('click', async function() {
+      if (!deleteTargetId) return;
+      
+      const spinner = document.getElementById('delete-spinner');
+      const btnText = document.getElementById('delete-btn-text');
+      
+      spinner.classList.remove('hidden');
+      btnText.textContent = 'กำลังลบ...';
+      this.disabled = true;
+      
+      try {
+        const params = new URLSearchParams();
+        params.append('action', 'delete');
+        params.append('id', deleteTargetId);
+        
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: params
+        });
+        
+        const text = await response.text();
+        let data;
+        
+        try {
+          data = JSON.parse(text);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          return;
+        }
+        
+        if (data.status === 'success') {
+          closeDeleteModal();
+          showSuccessModal('ลบสำเร็จ!', 'ข้อมูลสมาชิกถูกลบออกเรียบร้อยแล้ว');
+        }
+      } catch (error) {
+        console.error('Error deleting member:', error);
+      } finally {
+        spinner.classList.add('hidden');
+        btnText.textContent = 'ลบข้อมูล';
+        this.disabled = false;
+      }
+    });
+
+    function resetForm() {
+      document.getElementById('member-form').reset();
+      document.getElementById('member-id').value = '';
+      genderInput.value = '';
+      genderDisplay.textContent = '-- เลือกเพศ --';
+      clearProfileImage();
+      document.getElementById('form-mode-title').textContent = 'เพิ่มสมาชิกใหม่';
+      document.getElementById('submit-btn-text').textContent = '💾 บันทึกข้อมูล';
+    }
+
+    document.getElementById('member-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const spinner = document.getElementById('submit-spinner');
+      const btnText = document.getElementById('submit-btn-text');
+      
+      spinner.classList.remove('hidden');
+      btnText.textContent = 'กำลังบันทึก...';
+      submitBtn.disabled = true;
+      
+      const memberId = document.getElementById('member-id').value;
+      const isUpdate = memberId !== '';
+      
+      try {
+        const params = new URLSearchParams();
+        params.append('action', isUpdate ? 'update' : 'create');
+        
+        if (isUpdate) {
+          params.append('id', memberId);
+        }
+        
+        params.append('firstName', document.getElementById('firstName').value);
+        params.append('lastName', document.getElementById('lastName').value);
+        params.append('nickname', document.getElementById('nickname').value);
+        params.append('gender', genderInput.value);
+        params.append('birthday', document.getElementById('birthday').value);
+        params.append('phone', "'" + document.getElementById('phone').value);
+        params.append('email', document.getElementById('email').value);
+params.append('lineId', document.getElementById('LineID').value.trim());
+        params.append('recordDate', new Date().toISOString().split('T')[0]);
+        
+        if (currentImageBase64) {
+          params.append('imageBase64', currentImageBase64);
+          params.append('imageName', currentImageName);
+          params.append('imageType', currentImageType);
+        }
+        
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: params
+        });
+        
+        const text = await response.text();
+        let data;
+        
+        try {
+          data = JSON.parse(text);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          return;
+        }
+        
+        if (data.status === 'success') {
+          showSuccessModal(
+            'บันทึกสำเร็จ!', 
+            isUpdate ? 'ข้อมูลสมาชิกถูกอัปเดตเรียบร้อยแล้ว' : 'เพิ่มสมาชิกใหม่เรียบร้อยแล้ว'
+          );
+          resetForm();
+        }
+      } catch (error) {
+        console.error('Error saving member:', error);
+      } finally {
+        spinner.classList.add('hidden');
+        btnText.textContent = isUpdate ? '💾 อัปเดตข้อมูล' : '💾 บันทึกข้อมูล';
+        submitBtn.disabled = false;
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadMembers);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

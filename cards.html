@@ -100,6 +100,14 @@ body {
 <br>
 <button onclick="window.print()">Print PDF</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+  new QRCode(document.getElementById("qrcode1"), {
+    text: "https://line.me/ti/p/~somchai123",
+    width: 120,
+    height: 120
+  });
+</script> 
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card Corporate</title>
+<title>Business Card</title>
 
 <style>
 @page{
@@ -18,10 +18,10 @@
 body{
   font-family:"Sarabun", Arial, sans-serif;
   margin:0;
-  background:#f5f6f8;
+  background:#f2f4f7;
 }
 
-/* ===== Grid ===== */
+/* ===== GRID ===== */
 .container{
   display:grid;
   grid-template-columns: repeat(2, 90mm);
@@ -31,41 +31,12 @@ body{
 }
 
 .container:not(:last-child){
-  page-break-after: always;
+  page-break-after:always;
 }
 
-/* ===== Card ===== */
-.card-wrapper{
-  position:relative;
-  width:90mm;
-  height:54mm;
-}
-
-/* Crop Marks */
-.card-wrapper::before,
-.card-wrapper::after{
-  content:"";
-  position:absolute;
-  width:6mm;
-  height:6mm;
-  border:0.4mm solid #000;
-}
-
-.card-wrapper::before{
-  top:-4mm;
-  left:-4mm;
-  border-right:none;
-  border-bottom:none;
-}
-
-.card-wrapper::after{
-  bottom:-4mm;
-  right:-4mm;
-  border-left:none;
-  border-top:none;
-}
-
+/* ===== CARD ===== */
 .card{
+  position:relative;
   width:90mm;
   height:54mm;
   box-sizing:border-box;
@@ -74,21 +45,20 @@ body{
   align-items:center;
   justify-content:space-between;
 
-  /* พื้นหลังเรียบหรู */
   background:linear-gradient(135deg,#ffffff 70%, #eef2f7 100%);
   border-radius:3mm;
   box-shadow:0 1mm 2mm rgba(0,0,0,0.08);
 }
 
-/* ===== Logo ===== */
+/* ===== LOGO ===== */
 .logo{
   position:absolute;
-  top:3mm;
-  left:5mm;
+  top:4mm;
+  left:6mm;
   height:8mm;
 }
 
-/* ===== Profile ===== */
+/* ===== PROFILE ===== */
 .profile{
   width:24mm;
   height:24mm;
@@ -104,7 +74,7 @@ body{
   object-fit:cover;
 }
 
-/* ===== Info ===== */
+/* ===== INFO ===== */
 .info{
   flex:1;
   padding:0 4mm;
@@ -129,7 +99,7 @@ body{
   color:#333;
 }
 
-/* ===== Divider ===== */
+/* ===== DIVIDER ===== */
 .divider{
   width:0.3mm;
   height:80%;
@@ -137,10 +107,14 @@ body{
   margin-right:4mm;
 }
 
-/* ===== Barcode ===== */
-.barcode{
-  width:30mm;
-  height:18mm;
+/* ===== QR ===== */
+.qr{
+  width:22mm;
+  height:22mm;
+}
+.qr canvas{
+  width:100% !important;
+  height:100% !important;
 }
 </style>
 </head>
@@ -151,9 +125,10 @@ body{
 <br>
 <button onclick="window.print()">Print PDF</button>
 
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
+
 const members = [
   {
     fullname:"สมชาย ใจดี",
@@ -176,16 +151,13 @@ members.forEach((member, index)=>{
     printArea.appendChild(page);
   }
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "card-wrapper";
-
   const card = document.createElement("div");
   card.className = "card";
 
-  const barcodeId = "barcode_" + index;
+  const qrId = "qr_" + index;
 
   card.innerHTML = `
-    <img src="logo.png" class="logo">
+    <img src="./logo.png" class="logo">
 
     <div class="profile">
       <img src="${member.image}">
@@ -201,20 +173,19 @@ members.forEach((member, index)=>{
 
     <div class="divider"></div>
 
-    <svg id="${barcodeId}" class="barcode"></svg>
+    <div id="${qrId}" class="qr"></div>
   `;
 
-  wrapper.appendChild(card);
-  page.appendChild(wrapper);
+  page.appendChild(card);
 
-  JsBarcode("#" + barcodeId, member.line, {
-    format:"CODE128",
-    displayValue:false,
-    width:1.5,
-    height:40,
-    margin:0
+  new QRCode(document.getElementById(qrId), {
+    text: "https://line.me/ti/p/~" + member.line,
+    width: 120,
+    height: 120
   });
+
 });
+
 </script>
 
 </body>

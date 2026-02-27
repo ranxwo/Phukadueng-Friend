@@ -40,6 +40,7 @@ body {
   padding: 6mm;
   box-sizing: border-box;
   height: 55mm;
+  overflow: hidden;
 
   display: flex;
   flex-direction: row;
@@ -86,14 +87,14 @@ body {
 .qr {
   width: 30mm;
   height: 30mm;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
-.qr canvas {
-  width: 30mm !important;
-  height: 30mm !important;
+.qr canvas,
+.qr img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 </style>
 </head>
@@ -148,11 +149,11 @@ members.forEach((member, index) => {
 
   page.appendChild(card);
 
-  new QRCode(document.getElementById(qrId), {
-    text: "https://line.me/ti/p/~" + member.line,
-    width: 256,
-    height: 256
-  });
+new QRCode(document.getElementById(qrId), {
+  text: "https://line.me/ti/p/~" + member.line,
+  width: 120,
+  height: 120
+});
 
 });
 </script>

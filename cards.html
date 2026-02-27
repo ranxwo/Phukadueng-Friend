@@ -70,20 +70,17 @@ body {
 }
 
 .container {
-  width: 277mm;          /* 297 - margin 20mm */
-  height: 190mm;         /* 210 - margin 20mm */
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-
-  gap: 10mm;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   page-break-after: always;
 }
 
-.card {
-  width: 100%;
-  height: 100%;
+  .card {
+  width: 48%;
+  height: 85mm;   /* ล็อกความสูงแน่นอน */
+  margin-bottom: 10mm;
 
   background: white;
   border-radius: 12px;

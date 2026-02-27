@@ -41,6 +41,7 @@ body{
   height:54mm;
   box-sizing:border-box;
   padding:6mm;
+  padding-top:12mm;   /* กันโลโก้ทับข้อความ */
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -50,10 +51,23 @@ body{
   box-shadow:0 1mm 2mm rgba(0,0,0,0.08);
 }
 
+/* แถบหัวการ์ดองค์กร */
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:4mm;
+  background:#1f2d3d;
+  border-top-left-radius:3mm;
+  border-top-right-radius:3mm;
+}
+
 /* ===== LOGO ===== */
 .logo{
   position:absolute;
-  top:4mm;
+  top:1.5mm;
   left:6mm;
   height:8mm;
 }
@@ -180,8 +194,8 @@ members.forEach((member, index)=>{
 
   new QRCode(document.getElementById(qrId), {
     text: "https://line.me/ti/p/~" + member.line,
-    width: 120,
-    height: 120
+    width: 100,
+    height: 100
   });
 
 });

@@ -2,12 +2,12 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>V5 Business Card (90x54mm Real Size)</title>
+<title>Business Card Corporate</title>
 
 <style>
 @page{
-  size: A4 portrait;
-  margin: 10mm;
+  size:A4 portrait;
+  margin:12mm;
 }
 
 @media print{
@@ -16,16 +16,17 @@
 }
 
 body{
-  font-family: Arial, sans-serif;
+  font-family:"Sarabun", Arial, sans-serif;
   margin:0;
+  background:#f5f6f8;
 }
 
-/* ===== Grid Layout ===== */
+/* ===== Grid ===== */
 .container{
   display:grid;
   grid-template-columns: repeat(2, 90mm);
   grid-auto-rows: 54mm;
-  gap:5mm;
+  gap:8mm;
   justify-content:center;
 }
 
@@ -33,26 +34,68 @@ body{
   page-break-after: always;
 }
 
-/* ===== Card (Real Size 90x54 mm) ===== */
+/* ===== Card ===== */
+.card-wrapper{
+  position:relative;
+  width:90mm;
+  height:54mm;
+}
+
+/* Crop Marks */
+.card-wrapper::before,
+.card-wrapper::after{
+  content:"";
+  position:absolute;
+  width:6mm;
+  height:6mm;
+  border:0.4mm solid #000;
+}
+
+.card-wrapper::before{
+  top:-4mm;
+  left:-4mm;
+  border-right:none;
+  border-bottom:none;
+}
+
+.card-wrapper::after{
+  bottom:-4mm;
+  right:-4mm;
+  border-left:none;
+  border-top:none;
+}
+
 .card{
   width:90mm;
   height:54mm;
   box-sizing:border-box;
-  padding:4mm;
-  border:0.3mm dashed #aaa;   /* เส้นตัด */
+  padding:6mm;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  overflow:hidden;
+  justify-content:space-between;
+
+  /* พื้นหลังเรียบหรู */
+  background:linear-gradient(135deg,#ffffff 70%, #eef2f7 100%);
+  border-radius:3mm;
+  box-shadow:0 1mm 2mm rgba(0,0,0,0.08);
 }
 
-/* Profile */
+/* ===== Logo ===== */
+.logo{
+  position:absolute;
+  top:3mm;
+  left:5mm;
+  height:8mm;
+}
+
+/* ===== Profile ===== */
 .profile{
-  width:28mm;
-  height:28mm;
+  width:24mm;
+  height:24mm;
   border-radius:50%;
   overflow:hidden;
   flex-shrink:0;
+  border:0.5mm solid #ddd;
 }
 
 .profile img{
@@ -61,38 +104,43 @@ body{
   object-fit:cover;
 }
 
-/* Info */
+/* ===== Info ===== */
 .info{
   flex:1;
   padding:0 4mm;
-  font-size:11px;
 }
 
-.name{
-  font-size:14px;
-  font-weight:bold;
-}
-
-.role{
-  font-size:11px;
+.fullname{
+  font-size:15px;
+  font-weight:700;
   margin-bottom:2mm;
+  color:#1f2d3d;
 }
 
-.line{
-  font-size:10px;
+.nickname{
+  font-size:12px;
+  margin-bottom:2mm;
+  color:#666;
 }
 
-/* QR */
-.qr{
-  width:20mm;
-  height:20mm;
-  flex-shrink:0;
+.detail{
+  font-size:11px;
+  margin-bottom:1mm;
+  color:#333;
 }
 
-.qr canvas{
-  width:100% !important;
-  height:100% !important;
-  display:block;
+/* ===== Divider ===== */
+.divider{
+  width:0.3mm;
+  height:80%;
+  background:#d0d6dd;
+  margin-right:4mm;
+}
+
+/* ===== Barcode ===== */
+.barcode{
+  width:30mm;
+  height:18mm;
 }
 </style>
 </head>
@@ -103,19 +151,20 @@ body{
 <br>
 <button onclick="window.print()">Print PDF</button>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 <script>
-// ===== ตัวอย่างข้อมูล =====
 const members = [
-  { name:"สมชาย ใจดี", role:"สมาชิก", line:"somchai123" },
-  { name:"สมหญิง สดใส", role:"สมาชิก", line:"somying456" },
-  { name:"สมศักดิ์ มั่นคง", role:"สมาชิก", line:"somsak789" },
-  { name:"สมพร รุ่งเรือง", role:"สมาชิก", line:"somporn321" },
-  { name:"สมหมาย ใจงาม", role:"สมาชิก", line:"sommai555" }
+  {
+    fullname:"สมชาย ใจดี",
+    nickname:"ชาย",
+    phone:"081-234-5678",
+    email:"somchai@email.com",
+    line:"somchai123",
+    image:"https://via.placeholder.com/200"
+  }
 ];
 
-// ===== Render Cards =====
 const printArea = document.getElementById("printArea");
 let page;
 
@@ -127,33 +176,44 @@ members.forEach((member, index)=>{
     printArea.appendChild(page);
   }
 
+  const wrapper = document.createElement("div");
+  wrapper.className = "card-wrapper";
+
   const card = document.createElement("div");
   card.className = "card";
 
-  const qrId = "qr_" + index;
+  const barcodeId = "barcode_" + index;
 
   card.innerHTML = `
+    <img src="logo.png" class="logo">
+
     <div class="profile">
-      <img src="https://via.placeholder.com/150">
+      <img src="${member.image}">
     </div>
 
     <div class="info">
-      <div class="name">${member.name}</div>
-      <div class="role">${member.role}</div>
-      <div class="line">LINE ID: ${member.line}</div>
+      <div class="fullname">${member.fullname}</div>
+      <div class="nickname">ชื่อเล่น: ${member.nickname}</div>
+      <div class="detail">โทร: ${member.phone}</div>
+      <div class="detail">Email: ${member.email}</div>
+      <div class="detail">Line ID: ${member.line}</div>
     </div>
 
-    <div id="${qrId}" class="qr"></div>
+    <div class="divider"></div>
+
+    <svg id="${barcodeId}" class="barcode"></svg>
   `;
 
-  page.appendChild(card);
+  wrapper.appendChild(card);
+  page.appendChild(wrapper);
 
-  new QRCode(document.getElementById(qrId), {
-    text: "https://line.me/ti/p/~" + member.line,
-    width:100,
-    height:100
+  JsBarcode("#" + barcodeId, member.line, {
+    format:"CODE128",
+    displayValue:false,
+    width:1.5,
+    height:40,
+    margin:0
   });
-
 });
 </script>
 

@@ -37,14 +37,17 @@
 .qr {
   width: 30mm;
   height: 30mm;
-  border: 1px solid #000;
   margin: auto;
-  text-align: center;
-  line-height: 30mm;
 }
+  
 @page {
-  size: A4;
+  size: A4 landscape;
   margin: 10mm;
+}
+
+  @media print {
+  body { background: white; }
+  h2, button { display: none; }
 }
 
 body {
@@ -54,20 +57,20 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 10mm;
-  justify-content: center;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15mm;
+  justify-items: center;
+  page-break-after: always;
 }
 
 .card {
-  width: 55mm;
-  height: 90mm;
+  width: 85mm;
+  height: 55mm;
   background: white;
-  border-radius: 16px;
-  padding: 10mm;
-  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 8mm;
   box-sizing: border-box;
+  page-break-inside: avoid;
 }
   
 </style>
@@ -77,25 +80,7 @@ body {
 
 <h2>ทดสอบหน้า V4</h2>
 
-<div class="container">
-<div class="card">
-
-<div class="logo">
-  <img src="logo.png" alt="logo">
-</div>
-
-  <div class="name">สมชาย ใจดี</div>
-  <div class="role">สมาชิก</div>
-
-  <div class="line">LINE ID: somchai123</div>
-
-<div id="qrcode1" class="qr-box"></div>
-
-</div>
-  <div class="card">Card 2</div>
-  <div class="card">Card 3</div>
-  <div class="card">Card 4</div>
-</div>
+<div id="printArea"></div>
 
 <br>
 <button onclick="window.print()">Print PDF</button>
@@ -103,11 +88,49 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
-  new QRCode(document.getElementById("qrcode1"), {
-    text: "https://line.me/ti/p/~somchai123",
-    width: 120,
-    height: 120
+const members = [
+  { name: "สมชาย ใจดี", role: "สมาชิก", line: "somchai123" },
+  { name: "สมหญิง สดใส", role: "สมาชิก", line: "somying456" },
+  { name: "สมศักดิ์ มั่นคง", role: "สมาชิก", line: "somsak789" },
+  { name: "สมพร รุ่งเรือง", role: "สมาชิก", line: "somporn321" },
+  { name: "สมหมาย ใจงาม", role: "สมาชิก", line: "sommai555" }
+];
+
+const printArea = document.getElementById("printArea");
+let page;
+
+members.forEach((member, index) => {
+
+  if (index % 4 === 0) {
+    page = document.createElement("div");
+    page.className = "container";
+    printArea.appendChild(page);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const qrId = "qr_" + index;
+
+  card.innerHTML = `
+    <div class="logo">
+      <img src="logo.png">
+    </div>
+    <div class="name">${member.name}</div>
+    <div class="role">${member.role}</div>
+    <div class="line">LINE ID: ${member.line}</div>
+    <div id="${qrId}" class="qr"></div>
+  `;
+
+  page.appendChild(card);
+
+  new QRCode(document.getElementById(qrId), {
+    text: "https://line.me/ti/p/~" + member.line,
+    width: 110,
+    height: 110
   });
-</script> 
+
+});
+</script>
 </body>
 </html>

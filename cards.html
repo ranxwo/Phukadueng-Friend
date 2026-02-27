@@ -2,53 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>V4 Business Card</title>
+<title>V4 Business Card FINAL</title>
 
 <style>
-  .logo {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 5mm;
-}
-
-.logo img {
-  width: 30mm;
-  display: block;
-  margin: auto;
-}
-  
-  .name {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.role {
-  text-align: center;
-  margin-bottom: 5mm;
-}
-
-.line {
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 5mm;
-}
-
-.qr {
-  width: 30mm;
-  height: 30mm;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-  .qr canvas,
-.qr img {
-  width: 30mm !important;
-  height: 30mm !important;
-}
-  
 @page {
   size: A4 landscape;
   margin: 10mm;
@@ -57,11 +13,6 @@
 @media print {
   body { background: white; }
   h2, button { display: none; }
-
-  html, body {
-    width: 297mm;
-    height: 210mm;
-  }
 }
 
 body {
@@ -69,31 +20,35 @@ body {
   background: #f5f5f5;
 }
 
+/* ===== Page Layout ===== */
 .container {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 55mm 55mm;
+  gap: 10mm;
+  margin-bottom: 10mm;
+}
+
+.container:not(:last-child) {
   page-break-after: always;
 }
 
+/* ===== Card ===== */
 .card {
-  width: 48%;
-  height: 55mm;     /* ขนาดจริงของนามบัตร */
-  margin-bottom: 10mm;
-
   background: white;
   border-radius: 12px;
   padding: 6mm;
   box-sizing: border-box;
+  height: 55mm;
 
-  display: flex;              /* สำคัญ */
-  flex-direction: row;        /* เปลี่ยนจาก column เป็น row */
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-  .profile {
+/* ===== Profile ===== */
+.profile {
   width: 35mm;
   height: 35mm;
   border-radius: 50%;
@@ -107,20 +62,46 @@ body {
   object-fit: cover;
 }
 
+/* ===== Info ===== */
 .info {
   flex: 1;
   padding: 0 5mm;
+  text-align: center;
 }
-  
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.role {
+  margin: 2mm 0;
+}
+
+.line {
+  font-size: 12px;
+}
+
+/* ===== QR ===== */
+.qr {
+  width: 30mm;
+  height: 30mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr canvas {
+  width: 30mm !important;
+  height: 30mm !important;
+}
 </style>
 </head>
 
 <body>
 
-<h2 style="color:red;">TEST VERSION 999</h2>
-
+<h2 style="color:red;">V4 FINAL VERSION</h2>
 <div id="printArea"></div>
-
 <br>
 <button onclick="window.print()">Print PDF</button>
 
@@ -152,23 +133,25 @@ members.forEach((member, index) => {
   const qrId = "qr_" + index;
 
   card.innerHTML = `
-  <div class="profile">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...">
-  </div>
+    <div class="profile">
+      <img src="https://via.placeholder.com/150">
+    </div>
 
-  <div class="info">
-    <div class="name">${member.name}</div>
-    <div class="role">${member.role}</div>
-    <div class="line">LINE ID: ${member.line}</div>
-  </div>
+    <div class="info">
+      <div class="name">${member.name}</div>
+      <div class="role">${member.role}</div>
+      <div class="line">LINE ID: ${member.line}</div>
+    </div>
 
-  <div id="${qrId}" class="qr"></div>
-`;
+    <div id="${qrId}" class="qr"></div>
+  `;
 
   page.appendChild(card);
 
   new QRCode(document.getElementById(qrId), {
-    text: "https://line.me/ti/p/~" + member.line
+    text: "https://line.me/ti/p/~" + member.line,
+    width: 256,
+    height: 256
   });
 
 });

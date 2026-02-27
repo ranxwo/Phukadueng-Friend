@@ -1,107 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>V4 Business Card FINAL</title>
+<title>V5 Business Card (90x54mm Real Size)</title>
 
 <style>
-@page {
-  size: A4 landscape;
+@page{
+  size: A4 portrait;
   margin: 10mm;
 }
 
-@media print {
-  body { background: white; }
-  h2, button { display: none; }
+@media print{
+  body{ margin:0; }
+  button{ display:none; }
 }
 
-body {
+body{
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  margin:0;
 }
 
-/* ===== Page Layout ===== */
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 55mm 55mm;
-  gap: 10mm;
-  margin-bottom: 10mm;
+/* ===== Grid Layout ===== */
+.container{
+  display:grid;
+  grid-template-columns: repeat(2, 90mm);
+  grid-auto-rows: 54mm;
+  gap:5mm;
+  justify-content:center;
 }
 
-.container:not(:last-child) {
+.container:not(:last-child){
   page-break-after: always;
 }
 
-/* ===== Card ===== */
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 6mm;
-  box-sizing: border-box;
-  height: 55mm;
-  overflow: hidden;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+/* ===== Card (Real Size 90x54 mm) ===== */
+.card{
+  width:90mm;
+  height:54mm;
+  box-sizing:border-box;
+  padding:4mm;
+  border:0.3mm dashed #aaa;   /* เส้นตัด */
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  overflow:hidden;
 }
 
-/* ===== Profile ===== */
-.profile {
-  width: 35mm;
-  height: 35mm;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
+/* Profile */
+.profile{
+  width:28mm;
+  height:28mm;
+  border-radius:50%;
+  overflow:hidden;
+  flex-shrink:0;
 }
 
-.profile img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.profile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
-/* ===== Info ===== */
-.info {
-  flex: 1;
-  padding: 0 5mm;
-  text-align: center;
+/* Info */
+.info{
+  flex:1;
+  padding:0 4mm;
+  font-size:11px;
 }
 
-.name {
-  font-size: 16px;
-  font-weight: bold;
+.name{
+  font-size:14px;
+  font-weight:bold;
 }
 
-.role {
-  margin: 2mm 0;
+.role{
+  font-size:11px;
+  margin-bottom:2mm;
 }
 
-.line {
-  font-size: 12px;
+.line{
+  font-size:10px;
 }
 
-/* ===== QR ===== */
-.qr {
-  width: 30mm;
-  height: 30mm;
-  flex-shrink: 0;
+/* QR */
+.qr{
+  width:20mm;
+  height:20mm;
+  flex-shrink:0;
 }
 
-.qr canvas,
-.qr img {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
+.qr canvas{
+  width:100% !important;
+  height:100% !important;
+  display:block;
 }
 </style>
 </head>
 
 <body>
 
-<h2 style="color:red;">V4 FINAL VERSION</h2>
 <div id="printArea"></div>
 <br>
 <button onclick="window.print()">Print PDF</button>
@@ -109,20 +106,22 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
+// ===== ตัวอย่างข้อมูล =====
 const members = [
-  { name: "สมชาย ใจดี", role: "สมาชิก", line: "somchai123" },
-  { name: "สมหญิง สดใส", role: "สมาชิก", line: "somying456" },
-  { name: "สมศักดิ์ มั่นคง", role: "สมาชิก", line: "somsak789" },
-  { name: "สมพร รุ่งเรือง", role: "สมาชิก", line: "somporn321" },
-  { name: "สมหมาย ใจงาม", role: "สมาชิก", line: "sommai555" }
+  { name:"สมชาย ใจดี", role:"สมาชิก", line:"somchai123" },
+  { name:"สมหญิง สดใส", role:"สมาชิก", line:"somying456" },
+  { name:"สมศักดิ์ มั่นคง", role:"สมาชิก", line:"somsak789" },
+  { name:"สมพร รุ่งเรือง", role:"สมาชิก", line:"somporn321" },
+  { name:"สมหมาย ใจงาม", role:"สมาชิก", line:"sommai555" }
 ];
 
+// ===== Render Cards =====
 const printArea = document.getElementById("printArea");
 let page;
 
-members.forEach((member, index) => {
+members.forEach((member, index)=>{
 
-  if (index % 4 === 0) {
+  if(index % 10 === 0){
     page = document.createElement("div");
     page.className = "container";
     printArea.appendChild(page);
@@ -149,13 +148,14 @@ members.forEach((member, index) => {
 
   page.appendChild(card);
 
-new QRCode(document.getElementById(qrId), {
-  text: "https://line.me/ti/p/~" + member.line,
-  width: 120,
-  height: 120
-});
+  new QRCode(document.getElementById(qrId), {
+    text: "https://line.me/ti/p/~" + member.line,
+    width:100,
+    height:100
+  });
 
 });
 </script>
+
 </body>
 </html>

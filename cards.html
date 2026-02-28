@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card</title>
+<title>Business Card V4 Final</title>
 
 <style>
 @page{
@@ -18,7 +18,7 @@
 body{
   font-family:"Sarabun", Arial, sans-serif;
   margin:0;
-  background:#f2f4f7;
+  background:#eef2f6;
 }
 
 .container{
@@ -36,14 +36,13 @@ body{
 .card{
   width:90mm;
   height:54mm;
-  padding:6mm;
+  padding:7mm;
   box-sizing:border-box;
   background:white;
-  border-radius:3mm;
-  box-shadow:0 1mm 2mm rgba(0,0,0,0.05);
+  border-radius:4mm;
+  box-shadow:0 1mm 3mm rgba(0,0,0,0.05);
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
 }
 
 /* HEADER */
@@ -51,17 +50,19 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:3mm;
+  gap:4mm;
+  margin-bottom:3mm;
 }
 
 .header img{
-  height:9mm;
+  height:11mm;
 }
 
 .group-name{
-  font-size:14px;
+  font-size:16px;
   font-weight:700;
   color:#1f3b5c;
+  letter-spacing:0.3px;
 }
 
 /* BODY */
@@ -82,7 +83,7 @@ body{
   height:22mm;
   border-radius:50%;
   overflow:hidden;
-  border:1mm solid #e3e8ef;
+  border:1mm solid #e5e9f0;
 }
 
 .profile img{
@@ -94,7 +95,6 @@ body{
 .info{
   display:flex;
   flex-direction:column;
-  justify-content:center;
 }
 
 /* ชื่อจริง */
@@ -108,7 +108,7 @@ body{
 /* ชื่อเล่น */
 .nickname{
   font-size:12px;
-  color:#555;
+  color:#666;
   margin-bottom:3mm;
   font-weight:600;
 }
@@ -123,7 +123,6 @@ body{
   color:#444;
 }
 
-/* Email เล็กลง + ไม่ตัดบรรทัด */
 .email{
   font-size:10px;
   white-space:nowrap;
@@ -132,9 +131,9 @@ body{
 
 /* QR */
 .qr{
-  width:14mm;
-  height:14mm;
-  flex-shrink:0;
+  width:12mm;
+  height:12mm;
+  align-self:flex-end;
 }
 
 .qr canvas,
@@ -212,8 +211,8 @@ members.forEach((member, index)=>{
 
   new QRCode(document.getElementById(qrId), {
     text: "https://line.me/ti/p/~" + member.line,
-    width:120,
-    height:120
+    width:100,
+    height:100
   });
 
 });

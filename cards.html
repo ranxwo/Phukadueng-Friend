@@ -48,24 +48,27 @@ body{
   justify-content:space-between;
 }
 
-/* HEADER */
+/* ===== HEADER (ปรับสมดุลใหม่) ===== */
 .header{
   display:flex;
   align-items:center;
-  gap:4mm;
+  justify-content:center;
+  gap:3mm;
+  margin-bottom:2mm;
 }
 
 .header img{
-  height:8mm;
+  height:9mm;
 }
 
 .group-name{
-  font-size:14px;
+  font-size:15px;
   font-weight:700;
   color:#163a5f;
+  letter-spacing:0.5px;
 }
 
-/* BODY */
+/* ===== BODY ===== */
 .body{
   display:flex;
   justify-content:space-between;
@@ -99,17 +102,29 @@ body{
   justify-content:center;
 }
 
+/* ชื่อจริง */
 .fullname{
-  font-size:16px;
+  font-size:17px;
   font-weight:700;
   color:#123c63;
   margin-bottom:1mm;
 }
 
+/* ชื่อเล่นแบบมีสัญลักษณ์ */
 .nickname{
   font-size:12px;
   color:#7a5b2e;
-  margin-bottom:2mm;
+  margin-bottom:3mm;
+  font-weight:600;
+  letter-spacing:0.5px;
+}
+
+.nickname::before{
+  content:"“";
+}
+
+.nickname::after{
+  content:"”";
 }
 
 .detail{
@@ -118,7 +133,7 @@ body{
   color:#333;
 }
 
-/* QR — เล็กจริง */
+/* QR */
 .qr{
   width:14mm;
   height:14mm;

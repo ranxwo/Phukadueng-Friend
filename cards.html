@@ -36,58 +36,54 @@ body{
 
 /* ===== CARD ===== */
 .card{
-  position:relative;
   width:90mm;
   height:54mm;
-  box-sizing:border-box;
   padding:6mm;
+  box-sizing:border-box;
   background:white;
   border-radius:3mm;
   box-shadow:0 1mm 2mm rgba(0,0,0,0.05);
-  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
-/* เส้นไกด์ตัดแบบจาง */
-.card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border:0.2mm dashed rgba(0,0,0,0.07);
-  border-radius:3mm;
-  pointer-events:none;
-}
-
-/* ===== HEADER ===== */
+/* ===== HEADER (เตี้ยลง) ===== */
 .header{
-  text-align:center;
-  margin-bottom:4mm;
+  display:flex;
+  align-items:center;
+  gap:4mm;
 }
 
 .header img{
-  height:11mm;
-  display:block;
-  margin:0 auto 2mm auto;
+  height:8mm;
 }
 
 .group-name{
-  font-size:16px;
+  font-size:14px;
   font-weight:700;
   color:#163a5f;
 }
 
-/* ===== CONTENT ===== */
-.content{
+/* ===== BODY ===== */
+.body{
   display:flex;
-  align-items:center;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex:1;
 }
 
-/* ===== PROFILE ===== */
+/* LEFT SIDE */
+.left{
+  display:flex;
+  gap:5mm;
+}
+
 .profile{
-  width:24mm;
-  height:24mm;
+  width:22mm;
+  height:22mm;
   border-radius:50%;
   overflow:hidden;
-  flex-shrink:0;
   border:1mm solid #e3e8ef;
 }
 
@@ -97,35 +93,33 @@ body{
   object-fit:cover;
 }
 
-/* ===== INFO ===== */
 .info{
-  margin-left:6mm;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .fullname{
-  font-size:18px;
+  font-size:16px;
   font-weight:700;
   color:#123c63;
-  margin-bottom:2mm;
+  margin-bottom:1mm;
 }
 
 .nickname{
-  font-size:13px;
+  font-size:12px;
   color:#7a5b2e;
-  margin-bottom:3mm;
+  margin-bottom:2mm;
 }
 
 .detail{
-  font-size:12px;
-  margin-bottom:2mm;
+  font-size:11px;
+  margin-bottom:1mm;
   color:#333;
 }
 
-/* ===== QR (มุมล่างขวา) ===== */
+/* QR */
 .qr{
-  position:absolute;
-  bottom:5mm;
-  right:5mm;
   width:18mm;
   height:18mm;
 }
@@ -180,21 +174,23 @@ members.forEach((member, index)=>{
       <div class="group-name">กลุ่มเพื่อนภูกระดึง</div>
     </div>
 
-    <div class="content">
-      <div class="profile">
-        <img src="${member.image}">
+    <div class="body">
+      <div class="left">
+        <div class="profile">
+          <img src="${member.image}">
+        </div>
+
+        <div class="info">
+          <div class="fullname">${member.fullname}</div>
+          <div class="nickname">${member.nickname}</div>
+          <div class="detail">โทร: ${member.phone}</div>
+          <div class="detail">Email: ${member.email}</div>
+          <div class="detail">Line ID: ${member.line}</div>
+        </div>
       </div>
 
-      <div class="info">
-        <div class="fullname">${member.fullname}</div>
-        <div class="nickname">${member.nickname}</div>
-        <div class="detail">โทร: ${member.phone}</div>
-        <div class="detail">Email: ${member.email}</div>
-        <div class="detail">Line ID: ${member.line}</div>
-      </div>
+      <div id="${qrId}" class="qr"></div>
     </div>
-
-    <div id="${qrId}" class="qr"></div>
   `;
 
   page.appendChild(card);

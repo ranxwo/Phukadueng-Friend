@@ -21,7 +21,7 @@ body{
   background:#f2f4f7;
 }
 
-/* ===== GRID (4 ใบต่อหน้า A4 พอดีจริง) ===== */
+/* ===== A4 GRID ===== */
 .container{
   display:grid;
   grid-template-columns: repeat(2, 90mm);
@@ -41,20 +41,18 @@ body{
   height:54mm;
   box-sizing:border-box;
   padding:6mm;
-  display:flex;
-  flex-direction:column;
-  background:linear-gradient(135deg,#ffffff 70%, #eef2f7 100%);
+  background:white;
   border-radius:3mm;
   box-shadow:0 1mm 2mm rgba(0,0,0,0.05);
   overflow:hidden;
 }
 
-/* ===== เส้นไกด์ตัด (จาง ๆ) ===== */
+/* เส้นไกด์ตัดแบบจาง */
 .card::after{
   content:"";
   position:absolute;
   inset:0;
-  border:0.2mm dashed rgba(0,0,0,0.08);
+  border:0.2mm dashed rgba(0,0,0,0.07);
   border-radius:3mm;
   pointer-events:none;
 }
@@ -62,38 +60,35 @@ body{
 /* ===== HEADER ===== */
 .header{
   text-align:center;
-  margin-bottom:3mm;
+  margin-bottom:4mm;
 }
 
 .header img{
-  height:7mm;
+  height:11mm;
   display:block;
-  margin:0 auto 1mm auto;
+  margin:0 auto 2mm auto;
 }
 
 .group-name{
-  font-size:12px;
-  font-weight:600;
+  font-size:16px;
+  font-weight:700;
   color:#163a5f;
-  letter-spacing:0.3px;
 }
 
 /* ===== CONTENT ===== */
 .content{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  flex:1;
 }
 
 /* ===== PROFILE ===== */
 .profile{
-  width:22mm;
-  height:22mm;
+  width:24mm;
+  height:24mm;
   border-radius:50%;
   overflow:hidden;
   flex-shrink:0;
-  border:0.8mm solid #e3e8ef;
+  border:1mm solid #e3e8ef;
 }
 
 .profile img{
@@ -104,45 +99,35 @@ body{
 
 /* ===== INFO ===== */
 .info{
-  flex:1;
-  padding:0 4mm;
+  margin-left:6mm;
 }
 
 .fullname{
-  font-size:16px;
+  font-size:18px;
   font-weight:700;
   color:#123c63;
   margin-bottom:2mm;
 }
 
 .nickname{
-  font-size:12px;
+  font-size:13px;
   color:#7a5b2e;
   margin-bottom:3mm;
 }
 
 .detail{
-  font-size:11px;
-  margin-bottom:1.5mm;
+  font-size:12px;
+  margin-bottom:2mm;
   color:#333;
 }
 
-/* ===== DIVIDER ===== */
-.divider{
-  width:0.3mm;
-  height:70%;
-  background:#d0d6dd;
-  margin-right:3mm;
-}
-
-/* ===== QR ===== */
+/* ===== QR (มุมล่างขวา) ===== */
 .qr{
-  width:20mm;
-  height:20mm;
-  padding:2mm;
-  background:white;
-  border-radius:2mm;
-  box-shadow:0 1mm 2mm rgba(0,0,0,0.06);
+  position:absolute;
+  bottom:5mm;
+  right:5mm;
+  width:18mm;
+  height:18mm;
 }
 
 .qr canvas{
@@ -207,19 +192,17 @@ members.forEach((member, index)=>{
         <div class="detail">Email: ${member.email}</div>
         <div class="detail">Line ID: ${member.line}</div>
       </div>
-
-      <div class="divider"></div>
-
-      <div id="${qrId}" class="qr"></div>
     </div>
+
+    <div id="${qrId}" class="qr"></div>
   `;
 
   page.appendChild(card);
 
   new QRCode(document.getElementById(qrId), {
     text: "https://line.me/ti/p/~" + member.line,
-    width: 90,
-    height: 90
+    width:150,
+    height:150
   });
 
 });

@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card V4 Final</title>
+<title>Business Card V4 Elegant</title>
 
 <style>
 @page{
@@ -119,14 +119,24 @@ body{
 /* รายละเอียด */
 .detail{
   font-size:11px;
-  margin-bottom:1mm;
+  margin-bottom:1.2mm;
   color:#444;
+  display:flex;
+  align-items:center;
 }
 
 .email{
   font-size:10px;
   white-space:nowrap;
   color:#555;
+}
+
+/* ICON */
+.icon{
+  width:11px;
+  height:11px;
+  margin-right:4px;
+  fill:#666;
 }
 
 /* QR */
@@ -197,9 +207,27 @@ members.forEach((member, index)=>{
         <div class="info">
           <div class="fullname">${member.fullname}</div>
           <div class="nickname">${member.nickname}</div>
-          <div class="detail">โทร: ${member.phone}</div>
-          <div class="detail">Line ID: ${member.line}</div>
-          <div class="detail email">Email: ${member.email}</div>
+
+          <div class="detail">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
+            </svg>
+            ${member.phone}
+          </div>
+
+          <div class="detail">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M21 11.5a8.38 8.38 0 01-2.3.3c-4.5 0-8.2-3.7-8.2-8.2A8.38 8.38 0 0110.8 1 10 10 0 1023 13.2a8.38 8.38 0 01-2 .3z"/>
+            </svg>
+            ${member.line}
+          </div>
+
+          <div class="detail email">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M2 6l10 7 10-7v12H2z"/>
+            </svg>
+            ${member.email}
+          </div>
         </div>
       </div>
 

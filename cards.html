@@ -48,7 +48,7 @@ body{
   justify-content:space-between;
 }
 
-/* ===== HEADER (เตี้ยลง) ===== */
+/* HEADER */
 .header{
   display:flex;
   align-items:center;
@@ -65,7 +65,7 @@ body{
   color:#163a5f;
 }
 
-/* ===== BODY ===== */
+/* BODY */
 .body{
   display:flex;
   justify-content:space-between;
@@ -73,7 +73,7 @@ body{
   flex:1;
 }
 
-/* LEFT SIDE */
+/* LEFT */
 .left{
   display:flex;
   gap:5mm;
@@ -118,15 +118,18 @@ body{
   color:#333;
 }
 
-/* QR */
+/* QR — เล็กจริง */
 .qr{
-  width:18mm;
-  height:18mm;
+  width:14mm;
+  height:14mm;
+  flex-shrink:0;
 }
 
-.qr canvas{
+.qr canvas,
+.qr img{
   width:100% !important;
   height:100% !important;
+  display:block;
 }
 </style>
 </head>
@@ -197,8 +200,8 @@ members.forEach((member, index)=>{
 
   new QRCode(document.getElementById(qrId), {
     text: "https://line.me/ti/p/~" + member.line,
-    width:150,
-    height:150
+    width:120,
+    height:120
   });
 
 });

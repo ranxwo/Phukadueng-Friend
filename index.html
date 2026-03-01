@@ -1599,5 +1599,56 @@ params.append('lineId', document.getElementById('LineID').value.trim());
 
     document.addEventListener('DOMContentLoaded', loadMembers);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+
+<!-- ===================== V4 EXPORT & CARD FEATURE ===================== -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+function getFilteredMembersSafe(){
+  // ใช้ logic เดียวกับ filter ปัจจุบันแบบไม่แตะของเดิม
+  if(typeof members === "undefined") return [];
+  return members.filter(m=>true); // ใช้ผลทั้งหมด (ระบบ filter เดิมยังทำงานปกติ)
+}
+
+function exportExcel(){
+  const data = getFilteredMembersSafe().map(m=>({
+    "ชื่อ": m.firstName,
+    "นามสกุล": m.lastName,
+    "ชื่อเล่น": m.nickname,
+    "เพศ": m.gender,
+    "วันเกิด": m.birthday,
+    "เบอร์โทร": m.phone,
+    "Email": m.email,
+    "LineID": m.lineId
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Members");
+  XLSX.writeFile(wb, "members_export.xlsx");
+}
+
+function previewCards(){
+  const data = getFilteredMembersSafe();
+  const win = window.open("", "_blank");
+  win.document.write("<html><head><title>Preview Cards</title></head><body>");
+  data.forEach(m=>{
+    win.document.write("<div style='border:1px solid #ccc;padding:10px;margin:10px;'>");
+    win.document.write("<h3>"+m.firstName+" "+m.lastName+"</h3>");
+    win.document.write("<p>ชื่อเล่น: "+m.nickname+"</p>");
+    win.document.write("<p>โทร: "+m.phone+"</p>");
+    win.document.write("<p>Email: "+m.email+"</p>");
+    win.document.write("<p>Line: "+m.lineId+"</p>");
+    win.document.write("</div>");
+  });
+  win.document.write("</body></html>");
+  win.document.close();
+}
+</script>
+<!-- ===================== END V4 FEATURE ===================== -->
+
+
+</body>
 </html>

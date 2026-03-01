@@ -837,7 +837,13 @@ placeholder="yourlineid">
      </div>
      <div class="bg-white rounded-2xl card-shadow p-6 fade-in">
       <div class="flex items-center justify-between mb-6">
-       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">👥</span> รายชื่อสมาชิก</h2><button onclick="loadMembers()" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors" title="รีเฟรช">🔄</button>
+       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">👥</span> รายชื่อสมาชิก</h2>
+       <div class="flex gap-2">
+    <button onclick="previewCards()"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+      🪪 Export
+    </button>
+       <button onclick="loadMembers()" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors" title="รีเฟรช">🔄</button>
       </div>
       <div class="mb-6">
        <div class="relative mb-4">
@@ -1597,7 +1603,68 @@ params.append('lineId', document.getElementById('LineID').value.trim());
       }
     });
 
+     // ================================
+    // ฟังก์ชัน Export นามบัตร (V4)
+    // ================================
+    function previewCards() {
+
+      const visibleRows = document.querySelectorAll("#members-container tbody tr");
+
+      if (visibleRows.length === 0) {
+        alert("ไม่มีข้อมูลสำหรับ Export");
+        return;
+      }
+
+      let html = `
+        <html>
+        <head>
+          <title>Preview นามบัตร</title>
+          <style>
+            @page { size: A4 portrait; margin: 10mm; }
+            body { font-family: sans-serif; }
+            .card {
+              width: 90mm;
+              height: 55mm;
+              border: 1px solid #ccc;
+              float: left;
+              margin: 5mm;
+              padding: 5mm;
+              box-sizing: border-box;
+            }
+            .name { font-weight: bold; font-size: 16px; }
+            .phone { font-size: 14px; margin-top: 5px; }
+          </style>
+        </head>
+        <body>
+      `;
+
+      visibleRows.forEach(row => {
+        const nickname = row.children[1]?.innerText || "";
+        const phone = row.children[2]?.innerText || "";
+
+        html += `
+          <div class="card">
+            <div class="name">${nickname}</div>
+            <div class="phone">${phone}</div>
+          </div>
+        `;
+      });
+
+      html += "</body></html>";
+
+      const win = window.open("", "_blank");
+      win.document.write(html);
+      win.document.close();
+    }
+
+    // โหลดข้อมูลตอนเปิดหน้า
+   
     document.addEventListener('DOMContentLoaded', loadMembers);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+
+ 
+ </script>
+ </body>
 </html>
+

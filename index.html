@@ -1686,15 +1686,15 @@ body {
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  text-align:center;
+  gap:8px;
   font-weight:700;
   font-size:18px;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
-.logo svg {
-  display:block;
+.logo {
+  width:40px;
+  height:auto;
 }
 
 .top {
@@ -1736,14 +1736,12 @@ body {
   filteredMembers.slice(0,4).forEach(m => {
     html += `
       <div class="title">
-  <span class="logo">
-    <svg viewBox="0 0 120 60" width="50" height="28">
-      <circle cx="25" cy="25" r="12" fill="#facc15"/>
-      <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
-      <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
-    </svg>
-  </span>
-  กลุ่มเพื่อนภูกระดึง
+  <svg class="logo" viewBox="0 0 120 60">
+    <circle cx="25" cy="25" r="12" fill="#facc15"/>
+    <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
+    <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
+  </svg>
+  <span>กลุ่มเพื่อนภูกระดึง</span>
 </div>
         <div class="name">${m.firstName} ${m.lastName}</div>
         <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
@@ -1766,6 +1764,7 @@ body {
 
 </body>
 </html>
+
 
 
 

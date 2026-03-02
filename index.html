@@ -1703,7 +1703,11 @@ function previewCards(){
           กลุ่มเพื่อนภูกระดึง
         </div>
         <div class="top">
-          <img src="${m.profileImage || 'https://via.placeholder.com/150'}" class="avatar">
+          <img 
+  src="${m.profileImage && m.profileImage.trim() !== '' ? m.profileImage : defaultAvatar}" 
+  class="avatar"
+  onerror="this.src='${defaultAvatar}'"
+>
           <div>
             <div class="name">${m.firstName} ${m.lastName}</div>
             <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
@@ -1725,6 +1729,7 @@ function previewCards(){
 
 </body>
 </html>
+
 
 
 

@@ -1648,113 +1648,109 @@ function previewCards(){
     return;
   }
 
-  let html = `
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <title>Business Card</title>
-  <style>
-    @page { size: A4 portrait; margin: 10mm; }
+  const members = filteredMembers.slice(0,4);
 
-body {
-  font-family: "Sarabun", Arial, sans-serif;
+  let html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Business Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+@page { size:A4 portrait; margin:10mm; }
+
+body{
+  font-family:'Sarabun',sans-serif;
   margin:0;
-  background:#f3f4f6;
 }
 
-.page {
+.page{
   width:190mm;
   margin:auto;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12mm;
+  gap:10mm;
 }
 
-.card {
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:10mm;
+.card{
+  border:1px solid #ddd;
+  border-radius:16px;
+  padding:12mm;
   height:85mm;
-  background:#ffffff;
-  box-shadow:0 8px 18px rgba(0,0,0,0.06);
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
+  box-sizing:border-box;
 }
 
-.title {
+.title{
   display:flex;
   align-items:center;
   justify-content:center;
   gap:8px;
   font-weight:700;
   font-size:18px;
+  margin-bottom:18px;
+}
+
+.logo{
+  width:32px;
+}
+
+.name{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.nickname{
+  font-size:14px;
+  color:#666;
   margin-bottom:14px;
 }
 
-.logo {
-  width:40px;
-  height:auto;
-}
-
-.top {
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:12px;
-}
-
-.avatar {
-  width:75px;
-  height:75px;
-  border-radius:50%;
-  object-fit:cover;
-  border:3px solid #e5e7eb;
-}
-
-.name {
-  font-size:18px;
-  font-weight:700;
-}
-
-.nickname {
+.info{
   font-size:14px;
-  color:#6b7280;
-  margin-top:3px;
+  margin-bottom:6px;
 }
+</style>
+</head>
+<body>
 
-.info {
-  font-size:14px;
-  margin-top:6px;
-}
-  </style>
-  </head>
-  <body>
-  <div class="page">
-  `;
+<div class="page">
+`;
 
-  filteredMembers.slice(0,4).forEach(m => {
+  members.forEach(m=>{
     html += `
-      <div class="title">
-  <svg class="logo" viewBox="0 0 120 60">
-    <circle cx="25" cy="25" r="12" fill="#facc15"/>
-    <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
-    <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
-  </svg>
-  <span>กลุ่มเพื่อนภูกระดึง</span>
+<div class="card">
+
+  <div class="title">
+    <svg class="logo" viewBox="0 0 120 60">
+      <circle cx="25" cy="25" r="12" fill="#facc15"/>
+      <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
+      <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
+    </svg>
+    <span>กลุ่มเพื่อนภูกระดึง</span>
+  </div>
+
+  <div class="name">${m.firstName} ${m.lastName}</div>
+  <div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
+
+  <div class="info">📱 ${m.phone || "-"}</div>
+  <div class="info">📧 ${m.email || "-"}</div>
+  <div class="info">LINE: ${m.lineId || "-"}</div>
+
 </div>
-        <div class="name">${m.firstName} ${m.lastName}</div>
-        <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
-        <div class="info">📱 ${m.phone}</div>
-        <div class="info">📧 ${m.email}</div>
-        <div class="info">LINE: ${m.lineId || "-"}</div>
-      </div>
-    `;
+`;
   });
 
-  html += `</div></body></html>`;
+  html += `
+</div>
+</body>
+</html>
+`;
 
   const win = window.open("");
+  win.document.open();
   win.document.write(html);
   win.document.close();
 }
@@ -1764,6 +1760,7 @@ body {
 
 </body>
 </html>
+
 
 
 

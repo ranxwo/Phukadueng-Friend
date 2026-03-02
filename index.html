@@ -1640,162 +1640,87 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb, ws, "Members");
   XLSX.writeFile(wb, "members_export.xlsx");
 }
-
-<script>
 function previewCards(){
-  const data = filteredMembers;
-  if(!data || data.length === 0){
+
+  if (!filteredMembers || filteredMembers.length === 0) {
     alert("ไม่มีข้อมูลสำหรับพรีวิว");
     return;
   }
 
   const win = window.open("", "_blank");
+  const doc = win.document;
 
-  win.document.write(`
-  <html>
-  <head>
-  <title>Business Card Preview</title>
+  doc.open();
+  doc.write("<!DOCTYPE html><html><head><title>Business Card</title></head><body></body></html>");
+  doc.close();
 
-  <style>
-    @page {
-      size: A4 portrait;
-      margin: 10mm;
-    }
-
-    body{
-      font-family: Arial, sans-serif;
-      margin:0;
-      padding:0;
-    }
-
-    .page{
-      width: 190mm;
+  // ใส่ style
+  const style = doc.createElement("style");
+  style.innerHTML = `
+    @page { size: A4 portrait; margin: 10mm; }
+    body { font-family: Arial; margin:0; }
+    .page {
+      width:190mm;
       margin:auto;
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-columns:1fr 1fr;
       gap:10mm;
     }
-
-    .card{
-      border:1px solid #ddd;
+    .card {
+      border:1px solid #ccc;
       border-radius:12px;
-      padding:12mm;
+      padding:10mm;
+      height:85mm;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
-      height:85mm;
-      box-sizing:border-box;
     }
-
-    .header{
-      text-align:center;
-      font-size:14px;
-      font-weight:bold;
-      margin-bottom:5mm;
-    }
-
-    .top{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
+    .top{display:flex;gap:10px;align-items:center;}
     .avatar{
-      width:60px;
-      height:60px;
-      border-radius:50%;
-      object-fit:cover;
-      border:2px solid #ccc;
+      width:60px;height:60px;border-radius:50%;
+      object-fit:cover;border:2px solid #ddd;
     }
+    .name{font-weight:bold;font-size:16px;}
+    .nickname{font-size:13px;color:#666;}
+    .info{font-size:13px;margin-top:3px;}
+  `;
+  doc.head.appendChild(style);
 
-    .name{
-      font-size:18px;
-      font-weight:bold;
-    }
+  const page = doc.createElement("div");
+  page.className = "page";
+  doc.body.appendChild(page);
 
-    .nickname{
-      font-size:14px;
-      color:#666;
-    }
+  filteredMembers.slice(0,4).forEach(m => {
 
-    .info{
-      font-size:13px;
-      margin-top:3px;
-    }
+    const card = doc.createElement("div");
+    card.className = "card";
 
-    .bottom{
-      text-align:center;
-      margin-top:5mm;
-    }
-
-    .qr{
-      margin:auto;
-      width:80px;
-      height:80px;
-    }
-
-  </style>
-  </head>
-  <body>
-  <div class="page">
-  `);
-
-  data.slice(0,4).forEach(m=>{
-    const profile = m.profileImage || "";
-    const lineUrl = m.lineId ? "https://line.me/ti/p/~" + m.lineId : "";
-
-    win.document.write(`
-      <div class="card">
-        <div>
-          <div class="header">กลุ่มเพื่อนภูกระดึง</div>
-
-          <div class="top">
-            <img src="${profile}" class="avatar">
-            <div>
-              <div class="name">${m.firstName} ${m.lastName}</div>
-              <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
-            </div>
+    card.innerHTML = `
+      <div>
+        <div style="text-align:center;font-weight:bold;margin-bottom:8px;">
+          กลุ่มเพื่อนภูกระดึง
+        </div>
+        <div class="top">
+          <img src="${m.profileImage || ""}" class="avatar">
+          <div>
+            <div class="name">${m.firstName} ${m.lastName}</div>
+            <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
           </div>
-
-          <div class="info">📱 ${m.phone}</div>
-          <div class="info">📧 ${m.email}</div>
-          <div class="info">LINE: ${m.lineId || "-"}</div>
         </div>
-
-        <div class="bottom">
-          <div id="qr-${m.id}" class="qr"></div>
-        </div>
+        <div class="info">📱 ${m.phone}</div>
+        <div class="info">📧 ${m.email}</div>
+        <div class="info">LINE: ${m.lineId || "-"}</div>
       </div>
-    `);
+    `;
+
+    page.appendChild(card);
   });
 
-  win.document.write(`
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
-  <script>
-  ${data.slice(0,4).map(m=>`
-    new QRCode(document.getElementById("qr-${m.id}"), {
-      text: "${m.lineId ? "https://line.me/ti/p/~"+m.lineId : ""}",
-      width: 80,
-      height: 80
-    });
-  `).join("")}
-  <\/script>
-
-  </body>
-  </html>
-  `);
-
-  win.document.close();
 }
-</script>
+ <script>
 <!-- ===================== END V4 FEATURE ===================== -->
 
 
 </body>
 </html>
-
-
 

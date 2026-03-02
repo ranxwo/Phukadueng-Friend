@@ -1667,14 +1667,16 @@ function previewCards(){
       gap:10mm;
     }
     .card {
-      border:1px solid #ccc;
-      border-radius:12px;
-      padding:10mm;
-      height:85mm;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
+  border:1px solid #d1d5db;
+  border-radius:16px;
+  padding:8mm;
+  height:85mm;
+  background:#ffffff;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
     .top{display:flex;gap:10px;align-items:center;}
     .avatar{
       width:60px;height:60px;border-radius:50%;
@@ -1701,7 +1703,7 @@ function previewCards(){
           กลุ่มเพื่อนภูกระดึง
         </div>
         <div class="top">
-          <img src="${m.profileImage || ""}" class="avatar">
+          <img src="${m.profileImage || 'https://via.placeholder.com/150'}" class="avatar">
           <div>
             <div class="name">${m.firstName} ${m.lastName}</div>
             <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
@@ -1723,5 +1725,6 @@ function previewCards(){
 
 </body>
 </html>
+
 
 

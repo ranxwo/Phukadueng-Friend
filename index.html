@@ -1648,16 +1648,12 @@ function previewCards(){
     return;
   }
 
-  const win = window.open("", "_blank");
-  const doc = win.document;
-
-  doc.open();
-  doc.write("<!DOCTYPE html><html><head><title>Business Card</title></head><body></body></html>");
-  doc.close();
-
-  // ใส่ style
-  const style = doc.createElement("style");
-  style.innerHTML = `
+  let html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>Business Card</title>
+  <style>
     @page { size: A4 portrait; margin: 10mm; }
     body { font-family: Arial; margin:0; }
     .page {
@@ -1668,61 +1664,42 @@ function previewCards(){
       gap:10mm;
     }
     .card {
-  border:1px solid #d1d5db;
-  border-radius:16px;
-  padding:8mm;
-  height:85mm;
-  background:#ffffff;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-    .top{display:flex;gap:10px;align-items:center;}
-    .avatar{
-      width:60px;height:60px;border-radius:50%;
-      object-fit:cover;border:2px solid #ddd;
+      border:1px solid #d1d5db;
+      border-radius:16px;
+      padding:8mm;
+      height:85mm;
+      background:#ffffff;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
     }
     .name{font-weight:bold;font-size:16px;}
     .nickname{font-size:13px;color:#666;}
     .info{font-size:13px;margin-top:3px;}
+  </style>
+  </head>
+  <body>
+  <div class="page">
   `;
-  doc.head.appendChild(style);
-
-  const page = doc.createElement("div");
-  page.className = "page";
-  doc.body.appendChild(page);
 
   filteredMembers.slice(0,4).forEach(m => {
-
-    const card = doc.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div>
+    html += `
+      <div class="card">
         <div style="text-align:center;font-weight:bold;margin-bottom:8px;">
           กลุ่มเพื่อนภูกระดึง
         </div>
-        <div class="top">
-          <img 
-  src="${m.profileImage && m.profileImage.trim() !== '' ? m.profileImage : defaultAvatar}" 
-  class="avatar"
-  onerror="this.src='${defaultAvatar}'"
->
-          <div>
-            <div class="name">${m.firstName} ${m.lastName}</div>
-            <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
-          </div>
-        </div>
+        <div class="name">${m.firstName} ${m.lastName}</div>
+        <div class="nickname">ชื่อเล่น: ${m.nickname}</div>
         <div class="info">📱 ${m.phone}</div>
         <div class="info">📧 ${m.email}</div>
         <div class="info">LINE: ${m.lineId || "-"}</div>
       </div>
     `;
-
-    page.appendChild(card);
   });
 
+  html += `</div></body></html>`;
+
+  const win = window.open("");
+  win.document.write(html);
+  win.document.close();
 }
 </script>
 <!-- ===================== END V4 FEATURE ===================== -->
@@ -1730,6 +1707,7 @@ function previewCards(){
 
 </body>
 </html>
+
 
 
 

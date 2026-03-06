@@ -1656,9 +1656,11 @@ function previewCards(){
 <head>
 <meta charset="UTF-8">
 <title>Business Card</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+
 @page { size:A4 portrait; margin:10mm; }
 
 body{
@@ -1677,9 +1679,10 @@ body{
 .card{
   border:1px solid #ddd;
   border-radius:16px;
-  padding:12mm;
-  height:85mm;
+  padding:10mm;
+  height:80mm;
   box-sizing:border-box;
+  position:relative;
 }
 
 .title{
@@ -1689,55 +1692,94 @@ body{
   gap:8px;
   font-weight:700;
   font-size:18px;
-  margin-bottom:18px;
+  margin-bottom:12px;
 }
 
 .logo{
-  width:32px;
+  width:30px;
+}
+
+.profile{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+  position:absolute;
+  top:10mm;
+  right:10mm;
 }
 
 .name{
-  font-size:20px;
+  font-size:18px;
   font-weight:700;
-  margin-bottom:6px;
+  margin-bottom:4px;
 }
 
 .nickname{
   font-size:14px;
   color:#666;
-  margin-bottom:14px;
+  margin-bottom:10px;
 }
 
 .info{
   font-size:14px;
-  margin-bottom:6px;
+  margin-bottom:4px;
 }
+
+.qr{
+  position:absolute;
+  right:10mm;
+  bottom:10mm;
+}
+
+button{
+  position:fixed;
+  top:10px;
+  right:10px;
+  padding:10px 16px;
+  font-size:14px;
+}
+
+@media print{
+  button{ display:none; }
+}
+
 </style>
 </head>
+
 <body>
+
+<button onclick="window.print()">พิมพ์ / Save PDF</button>
 
 <div class="page">
 `;
 
-  members.forEach(m=>{
+  members.forEach((m,i)=>{
+
+    const avatar = m.profileImage || "${defaultAvatar}";
+
     html += `
 <div class="card">
 
-  <div class="title">
-    <svg class="logo" viewBox="0 0 120 60">
-      <circle cx="25" cy="25" r="12" fill="#facc15"/>
-      <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
-      <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
-    </svg>
-    <span>กลุ่มเพื่อนภูกระดึง</span>
-  </div>
+<img src="${avatar}" class="profile">
 
-  <div class="name">${m.firstName} ${m.lastName}</div>
-  <div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
+<div class="title">
+<svg class="logo" viewBox="0 0 120 60">
+<circle cx="25" cy="25" r="12" fill="#facc15"/>
+<polygon points="55,40 70,15 85,40" fill="#6b7280"/>
+<polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
+</svg>
+<span>กลุ่มเพื่อนภูกระดึง</span>
+</div>
 
-  <div class="info">📱 ${m.phone || "-"}</div>
-  <div class="info">📧 ${m.email || "-"}</div>
-  <div class="info">LINE: ${m.lineId || "-"}</div>
+<div class="name">${m.firstName} ${m.lastName}</div>
+<div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
+
+<div class="info">📱 ${m.phone || "-"}</div>
+<div class="info">📧 ${m.email || "-"}</div>
+<div class="info">LINE: ${m.lineId || "-"}</div>
+
+<div id="qr${i}" class="qr"></div>
 
 </div>
 `;
@@ -1745,28 +1787,28 @@ body{
 
   html += `
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
+
+<script>
+const members = ${JSON.stringify(members)};
+
+members.forEach((m,i)=>{
+  if(m.lineId){
+    new QRCode(document.getElementById("qr"+i),{
+      text:"https://line.me/ti/p/~"+m.lineId,
+      width:60,
+      height:60
+    });
+  }
+});
+<\/script>
+
 </body>
 </html>
 `;
 
   const win = window.open("");
-  win.document.open();
   win.document.write(html);
   win.document.close();
 }
-</script>
-<!-- ===================== END V4 FEATURE ===================== -->
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-

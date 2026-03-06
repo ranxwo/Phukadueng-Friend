@@ -1614,57 +1614,37 @@ params.append('lineId', document.getElementById('LineID').value.trim());
       }
     });
 
- document.addEventListener('DOMContentLoaded', function(){
-  if (typeof loadMembers === "function") {
-    loadMembers();
-  }
-});
+    document.addEventListener('DOMContentLoaded', loadMembers);
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cee286255afa183',t:'MTc3MTI1NjU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 
 <!-- ===================== V4 EXPORT & CARD FEATURE ===================== -->
-
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <script>
-
-if (typeof filteredMembers === "undefined") {
-  var filteredMembers = [];
-}
-
+ const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%239ca3af'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='22' fill='%239ca3af'/%3E%3C/svg%3E";
 function exportExcel(){
-
-  if (!filteredMembers.length) {
-    alert("ไม่มีข้อมูลสำหรับ Export");
-    return;
-  }
-
-  const data = filteredMembers.map(m => ({
-    "ชื่อ": m.firstName || "",
-    "นามสกุล": m.lastName || "",
-    "ชื่อเล่น": m.nickname || "",
-    "เพศ": m.gender || "",
-    "วันเกิด": m.birthday || "",
-    "เบอร์โทร": m.phone || "",
-    "Email": m.email || "",
-    "LineID": m.lineId || ""
+  const data = filteredMembers.map(m=>({
+    "ชื่อ": m.firstName,
+    "นามสกุล": m.lastName,
+    "ชื่อเล่น": m.nickname,
+    "เพศ": m.gender,
+    "วันเกิด": m.birthday,
+    "เบอร์โทร": m.phone,
+    "Email": m.email,
+    "LineID": m.lineId
   }));
 
   const ws = XLSX.utils.json_to_sheet(data);
   const wb = XLSX.utils.book_new();
-
   XLSX.utils.book_append_sheet(wb, ws, "Members");
-
   XLSX.writeFile(wb, "members_export.xlsx");
-
 }
-
-
-
 function previewCards(){
 
   if (!filteredMembers || filteredMembers.length === 0) {
-    alert("ไม่มีข้อมูลสมาชิก");
+    alert("ไม่มีข้อมูลสำหรับพรีวิว");
     return;
   }
 
@@ -1676,127 +1656,116 @@ function previewCards(){
 <head>
 <meta charset="UTF-8">
 <title>Business Card</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-
 @page { size:A4 portrait; margin:10mm; }
 
 body{
-font-family:'Sarabun',sans-serif;
-margin:0;
+  font-family:'Sarabun',sans-serif;
+  margin:0;
 }
 
 .page{
-width:190mm;
-margin:auto;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10mm;
+  width:190mm;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10mm;
 }
 
 .card{
-border:1px solid #ddd;
-border-radius:16px;
-padding:10mm;
-height:80mm;
-box-sizing:border-box;
+  border:1px solid #ddd;
+  border-radius:16px;
+  padding:12mm;
+  height:85mm;
+  box-sizing:border-box;
 }
 
 .title{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:8px;
-font-weight:700;
-font-size:18px;
-margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-weight:700;
+  font-size:18px;
+  margin-bottom:18px;
 }
 
 .logo{
-width:28px;
+  width:32px;
 }
 
 .name{
-font-size:18px;
-font-weight:700;
-margin-bottom:6px;
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:6px;
 }
 
 .nickname{
-font-size:14px;
-color:#666;
-margin-bottom:10px;
+  font-size:14px;
+  color:#666;
+  margin-bottom:14px;
 }
 
 .info{
-font-size:14px;
-margin-bottom:4px;
+  font-size:14px;
+  margin-bottom:6px;
 }
-
-button{
-position:fixed;
-top:10px;
-right:10px;
-padding:8px 14px;
-}
-
-@media print{
-button{display:none;}
-}
-
 </style>
-
 </head>
-
 <body>
-
-<button onclick="window.print()">พิมพ์ / Save PDF</button>
 
 <div class="page">
 `;
 
-members.forEach(m => {
-
-html += `
+  members.forEach(m=>{
+    html += `
 <div class="card">
 
-<div class="title">
-<svg class="logo" viewBox="0 0 120 60">
-<circle cx="25" cy="25" r="12" fill="#facc15"/>
-<polygon points="55,40 70,15 85,40" fill="#6b7280"/>
-<polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
-</svg>
-<span>กลุ่มเพื่อนภูกระดึง</span>
-</div>
+  <div class="title">
+    <svg class="logo" viewBox="0 0 120 60">
+      <circle cx="25" cy="25" r="12" fill="#facc15"/>
+      <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
+      <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
+    </svg>
+    <span>กลุ่มเพื่อนภูกระดึง</span>
+  </div>
 
-<div class="name">${m.firstName || ""} ${m.lastName || ""}</div>
+  <div class="name">${m.firstName} ${m.lastName}</div>
+  <div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
 
-<div class="nickname">
-ชื่อเล่น: ${m.nickname || "-"}
-</div>
-
-<div class="info">📱 ${m.phone || "-"}</div>
-<div class="info">📧 ${m.email || "-"}</div>
-<div class="info">LINE: ${m.lineId || "-"}</div>
+  <div class="info">📱 ${m.phone || "-"}</div>
+  <div class="info">📧 ${m.email || "-"}</div>
+  <div class="info">LINE: ${m.lineId || "-"}</div>
 
 </div>
 `;
+  });
 
-});
-
-html += `
+  html += `
 </div>
 </body>
 </html>
 `;
 
-const win = window.open();
-win.document.write(html);
-
+  const win = window.open("");
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
 }
-
 </script>
-
 <!-- ===================== END V4 FEATURE ===================== -->
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

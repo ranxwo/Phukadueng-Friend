@@ -1682,7 +1682,6 @@ body{
   padding:10mm;
   height:80mm;
   box-sizing:border-box;
-  position:relative;
 }
 
 .title{
@@ -1692,27 +1691,17 @@ body{
   gap:8px;
   font-weight:700;
   font-size:18px;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .logo{
-  width:30px;
-}
-
-.profile{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  object-fit:cover;
-  position:absolute;
-  top:10mm;
-  right:10mm;
+  width:28px;
 }
 
 .name{
   font-size:18px;
   font-weight:700;
-  margin-bottom:4px;
+  margin-bottom:6px;
 }
 
 .nickname{
@@ -1726,22 +1715,15 @@ body{
   margin-bottom:4px;
 }
 
-.qr{
-  position:absolute;
-  right:10mm;
-  bottom:10mm;
-}
-
 button{
   position:fixed;
   top:10px;
   right:10px;
-  padding:10px 16px;
-  font-size:14px;
+  padding:8px 14px;
 }
 
 @media print{
-  button{ display:none; }
+  button{display:none;}
 }
 
 </style>
@@ -1754,14 +1736,10 @@ button{
 <div class="page">
 `;
 
-  members.forEach((m,i)=>{
-
-    const avatar = m.profileImage || "${defaultAvatar}";
+  members.forEach(m=>{
 
     html += `
 <div class="card">
-
-<img src="${avatar}" class="profile">
 
 <div class="title">
 <svg class="logo" viewBox="0 0 120 60">
@@ -1772,14 +1750,12 @@ button{
 <span>กลุ่มเพื่อนภูกระดึง</span>
 </div>
 
-<div class="name">${m.firstName} ${m.lastName}</div>
+<div class="name">${m.firstName || ""} ${m.lastName || ""}</div>
 <div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
 
 <div class="info">📱 ${m.phone || "-"}</div>
 <div class="info">📧 ${m.email || "-"}</div>
 <div class="info">LINE: ${m.lineId || "-"}</div>
-
-<div id="qr${i}" class="qr"></div>
 
 </div>
 `;
@@ -1788,27 +1764,10 @@ button{
   html += `
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
-
-<script>
-const members = ${JSON.stringify(members)};
-
-members.forEach((m,i)=>{
-  if(m.lineId){
-    new QRCode(document.getElementById("qr"+i),{
-      text:"https://line.me/ti/p/~"+m.lineId,
-      width:60,
-      height:60
-    });
-  }
-});
-<\/script>
-
 </body>
 </html>
 `;
 
-  const win = window.open("");
+  const win = window.open();
   win.document.write(html);
-  win.document.close();
 }

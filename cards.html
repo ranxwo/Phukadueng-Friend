@@ -181,18 +181,35 @@ if(members.length === 0){
 
 function convertDrive(url){
 
-  if(!url) return "avatar.png";
+  if(!url || url === "null"){
+    return "https://ui-avatars.com/api/?name=User&background=random";
+  }
 
   if(url.includes("drive.google.com")){
+
     try{
-      const id = url.split("/d/")[1].split("/")[0];
-      return "https://drive.google.com/uc?export=view&id=" + id;
-    }catch{
-      return url;
+
+      let id;
+
+      if(url.includes("/d/")){
+        id = url.split("/d/")[1].split("/")[0];
+      } 
+      else if(url.includes("id=")){
+        id = url.split("id=")[1];
+      }
+
+      if(id){
+        return "https://drive.google.com/uc?export=view&id=" + id;
+      }
+
+    }catch(e){
+      console.log("Drive parse error", url);
     }
+
   }
 
   return url;
+
 }
 
 /* ---------- สร้างการ์ด ---------- */

@@ -2,258 +2,132 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card V4 Elegant</title>
+<title>Phukadueng Friend Card</title>
 
 <style>
 
-@page{
-  size:A4 portrait;
-  margin:10mm;
-}
-
-@media print{
-  body{ margin:0; background:white; }
-  button{ display:none; }
-}
-
 body{
-  font-family:"Sarabun", Arial, sans-serif;
-  margin:0;
-  background:#eef2f6;
+font-family: "Prompt", sans-serif;
+background:#f4f6fb;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
 }
-
-/* A4 Layout */
-
-.container{
-  display:grid;
-  grid-template-columns: repeat(2, 90mm);
-  grid-auto-rows: 54mm;
-  gap:6mm;
-  justify-content:center;
-}
-
-.container:not(:last-child){
-  page-break-after:always;
-}
-
-/* CARD */
 
 .card{
-  width:90mm;
-  height:54mm;
-  padding:6mm;
-  box-sizing:border-box;
-  background:white;
-  border-radius:4mm;
-  box-shadow:0 1mm 3mm rgba(0,0,0,0.05);
-  border-top:1.5mm solid #5b6cff;
-  position:relative;
-  display:flex;
-  flex-direction:column;
+width:600px;
+height:340px;
+background:#f8f8f8;
+border-radius:25px;
+padding:25px 30px;
+box-shadow:0 8px 18px rgba(0,0,0,0.15);
+border-top:6px solid #5b6df6;
+position:relative;
 }
 
-/* HEADER */
+/* โลโก้ + ชื่อกลุ่ม */
 
 .header{
-  display:flex;
-  align-items:center;
-  gap:4mm;
+display:flex;
+align-items:center;
+gap:8px;
+margin-left:-8px;
 }
 
-.header img{
-  height:11mm;
+.logo{
+width:55px;
 }
 
 .group-name{
-  font-size:16px;
-  font-weight:700;
-  color:#1f3b5c;
+font-size:22px;
+font-weight:600;
+color:#294f8b;
 }
 
-/* PROFILE */
+/* รูปโปรไฟล์ */
 
 .profile{
-  position:absolute;
-  top:6mm;
-  right:6mm;
-  width:20mm;
-  height:20mm;
-  border-radius:4mm;
-  overflow:hidden;
-  border:1mm solid #e5e9f0;
+position:absolute;
+top:40px;
+right:40px;
 }
 
 .profile img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:120px;
+height:140px;
+object-fit:cover;
+border-radius:18px;
+border:4px solid #e5e5e5;
 }
 
-/* INFO */
+/* ชื่อ */
 
-.info{
-  margin-top:8mm;
-  display:flex;
-  flex-direction:column;
-}
-
-.fullname{
-  font-size:17px;
-  font-weight:700;
-  color:#1f3b5c;
+.name{
+margin-top:40px;
+font-size:28px;
+font-weight:700;
+color:#222;
 }
 
 .nickname{
-  font-size:12px;
-  color:#666;
-  margin-bottom:2mm;
-  font-weight:600;
+color:#6b7cff;
+font-weight:600;
+margin-bottom:10px;
 }
 
-.nickname::before{ content:"“"; }
-.nickname::after{ content:"”"; }
+/* ข้อมูล */
 
-.detail{
-  font-size:11px;
-  margin-bottom:1mm;
-  display:flex;
-  align-items:center;
-  color:#444;
+.info{
+margin-top:10px;
+line-height:1.8;
+font-size:18px;
 }
 
-.email{
-  font-size:10px;
-}
-
-/* ICON */
-
-.icon{
-  width:12px;
-  height:12px;
-  margin-right:5px;
-}
-
-.phone-icon{ fill:#d62828; }
-.line-icon{ fill:#06C755; }
-.mail-icon{ fill:#c98c00; }
-
-/* QR */
+/* QR Code */
 
 .qr{
-  position:absolute;
-  right:6mm;
-  bottom:6mm;
-  width:14mm;
-  height:14mm;
+position:absolute;
+bottom:30px;
+right:55px;
 }
 
-.qr canvas,
 .qr img{
-  width:100% !important;
-  height:100% !important;
-  display:block;
+width:80px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div id="printArea"></div>
-
-<br>
-
-<button onclick="window.print()">Print PDF</button>
-
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-<script>
-
-const members = [
-
-{
-fullname:"รวีวรรณ พันธ์สนิท",
-nickname:"แตน",
-phone:"081-4805-793",
-email:"rawiwan111483@gmail.com",
-line:"rawiwan12345",
-image:"profile.jpg"
-}
-
-];
-
-const printArea = document.getElementById("printArea");
-
-let page;
-
-members.forEach((member, index)=>{
-
-if(index % 4 === 0){
-page = document.createElement("div");
-page.className = "container";
-printArea.appendChild(page);
-}
-
-const card = document.createElement("div");
-card.className = "card";
-
-const qrId = "qr_" + index;
-
-card.innerHTML = `
+<div class="card">
 
 <div class="header">
-<img src="logo.png">
+<img src="logo.png" class="logo">
 <div class="group-name">กลุ่มเพื่อนภูกระดึง</div>
 </div>
 
 <div class="profile">
-<img src="${member.image}">
+<img src="profile.jpg">
 </div>
+
+<div class="name">รวีวรรณ พันธ์สนิท</div>
+<div class="nickname">“แตน”</div>
 
 <div class="info">
-
-<div class="fullname">${member.fullname}</div>
-
-<div class="nickname">${member.nickname}</div>
-
-<div class="detail">
-<svg class="icon phone-icon" viewBox="0 0 24 24">
-<path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
-</svg>
-${member.phone}
+📞 081-4805-793<br>
+💬 rawiwan12345<br>
+✉ rawiwan111483@gmail.com
 </div>
 
-<div class="detail">
-<svg class="icon line-icon" viewBox="0 0 24 24">
-<path d="M12 2C6.5 2 2 5.7 2 10.3c0 4 3.2 7.3 7.5 8l-.4 2.7c-.1.5.4.8.8.5l3.2-2.3c5.1-.2 9-3.8 9-8.9C22 5.7 17.5 2 12 2z"/>
-</svg>
-${member.line}
-</div>
-
-<div class="detail email">
-<svg class="icon mail-icon" viewBox="0 0 24 24">
-<path d="M2 6l10 7 10-7v12H2z"/>
-</svg>
-${member.email}
+<div class="qr">
+<img src="qr.png">
 </div>
 
 </div>
-
-<div id="${qrId}" class="qr"></div>
-
-`;
-
-page.appendChild(card);
-
-new QRCode(document.getElementById(qrId), {
-text:"https://line.me/ti/p/~" + member.line,
-width:100,
-height:100
-});
-
-});
-
-</script>
 
 </body>
 </html>

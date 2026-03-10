@@ -1643,20 +1643,24 @@ function exportExcel(){
   XLSX.writeFile(wb, "members_export.xlsx");
 }
 
- function exportCards(){
+function exportCards(){
 
-  if (!filteredMembers || filteredMembers.length === 0) {
-    alert("ไม่มีข้อมูลสำหรับ Export");
+  const data = (filteredMembers && filteredMembers.length)
+    ? filteredMembers
+    : members;
+
+  if (!data || data.length === 0) {
+    alert("ไม่มีข้อมูลสมาชิก");
     return;
   }
 
-  const membersData = filteredMembers.map(m => ({
+  const membersData = data.map(m => ({
     fullname: (m.firstName || "") + " " + (m.lastName || ""),
     nickname: m.nickname || "-",
     phone: m.phone || "-",
     email: m.email || "-",
     line: m.lineId || "-",
-    image: m.image || defaultAvatar
+    image: m.image || ""
   }));
 
   localStorage.setItem("membersData", JSON.stringify(membersData));
@@ -1671,6 +1675,7 @@ function exportExcel(){
 
 </body>
 </html>
+
 
 
 

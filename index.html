@@ -1654,7 +1654,11 @@ function exportCards(){
     return;
   }
 
- const membersData = filteredMembers.map(m => ({
+const dataToPrint = (filteredMembers && filteredMembers.length)
+  ? filteredMembers
+  : members;
+
+const membersData = dataToPrint.map(m => ({
   fullname: m.fullname || "-",
   nickname: m.nickname || "-",
   phone: m.phone || "-",
@@ -1673,6 +1677,7 @@ window.open("cards.html","_blank");
 
 </body>
 </html>
+
 
 
 

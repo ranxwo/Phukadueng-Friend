@@ -172,7 +172,6 @@ body{
 /* ---------- อ่านข้อมูล ---------- */
 
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
-  console.log(members);
 
 if(members.length === 0){
   document.body.innerHTML = "<h2 style='text-align:center'>ไม่มีข้อมูลสำหรับ Export</h2>";

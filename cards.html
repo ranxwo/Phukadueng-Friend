@@ -159,7 +159,8 @@ display:block;
 
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
   members.forEach(m=>{
-m.fullname = m.fullname || m.name || "";
+members.forEach(m=>{
+m.fullname = m.fullname;
 m.nickname = m.nickname || "";
 m.phone = m.phone || "";
 m.line = m.line || m.lineId || "";

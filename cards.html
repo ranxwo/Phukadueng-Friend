@@ -158,6 +158,14 @@ display:block;
 /* อ่านข้อมูล */
 
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
+  members.forEach(m=>{
+m.fullname = m.fullname || m.name || "";
+m.nickname = m.nickname || "";
+m.phone = m.phone || "";
+m.line = m.line || m.lineId || "";
+m.email = m.email || "";
+m.image = m.image || m.profileImage || "";
+});
 
 if(members.length === 0){
 document.body.innerHTML="<h2 style='text-align:center'>ไม่มีข้อมูลสำหรับ Export</h2>";

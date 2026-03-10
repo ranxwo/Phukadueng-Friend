@@ -838,11 +838,12 @@ placeholder="yourlineid">
      <div class="bg-white rounded-2xl card-shadow p-6 fade-in">
       <div class="flex items-center justify-between mb-6">
        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">👥</span> รายชื่อสมาชิก</h2><div class="flex items-center gap-2">
-  <button onclick="previewCards()" 
-    class="px-3 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-sm">
-    🪪 Preview
-  </button>
 
+  <button onclick="exportCards()" 
+class="px-3 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-sm">
+🪪 Cards
+</button>
+        
   <button onclick="exportExcel()" 
     class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
     📥 Excel
@@ -1641,124 +1642,35 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb, ws, "Members");
   XLSX.writeFile(wb, "members_export.xlsx");
 }
-function previewCards(){
+
+ function exportCards(){
 
   if (!filteredMembers || filteredMembers.length === 0) {
-    alert("ไม่มีข้อมูลสำหรับพรีวิว");
+    alert("ไม่มีข้อมูลสำหรับ Export");
     return;
   }
 
-  const members = filteredMembers.slice(0,4);
+  const membersData = filteredMembers.map(m => ({
+    fullname: (m.firstName || "") + " " + (m.lastName || ""),
+    nickname: m.nickname || "-",
+    phone: m.phone || "-",
+    email: m.email || "-",
+    line: m.lineId || "-",
+    image: m.image || defaultAvatar
+  }));
 
-  let html = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Business Card</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+  localStorage.setItem("membersData", JSON.stringify(membersData));
 
-<style>
-@page { size:A4 portrait; margin:10mm; }
+  window.open("Cards.html","_blank");
 
-body{
-  font-family:'Sarabun',sans-serif;
-  margin:0;
 }
-
-.page{
-  width:190mm;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10mm;
-}
-
-.card{
-  border:1px solid #ddd;
-  border-radius:16px;
-  padding:12mm;
-  height:85mm;
-  box-sizing:border-box;
-}
-
-.title{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  font-weight:700;
-  font-size:18px;
-  margin-bottom:18px;
-}
-
-.logo{
-  width:32px;
-}
-
-.name{
-  font-size:20px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-
-.nickname{
-  font-size:14px;
-  color:#666;
-  margin-bottom:14px;
-}
-
-.info{
-  font-size:14px;
-  margin-bottom:6px;
-}
-</style>
-</head>
-<body>
-
-<div class="page">
-`;
-
-  members.forEach(m=>{
-    html += `
-<div class="card">
-
-  <div class="title">
-    <svg class="logo" viewBox="0 0 120 60">
-      <circle cx="25" cy="25" r="12" fill="#facc15"/>
-      <polygon points="55,40 70,15 85,40" fill="#6b7280"/>
-      <polygon points="70,40 85,18 100,40" fill="#9ca3af"/>
-    </svg>
-    <span>กลุ่มเพื่อนภูกระดึง</span>
-  </div>
-
-  <div class="name">${m.firstName} ${m.lastName}</div>
-  <div class="nickname">ชื่อเล่น: ${m.nickname || "-"}</div>
-
-  <div class="info">📱 ${m.phone || "-"}</div>
-  <div class="info">📧 ${m.email || "-"}</div>
-  <div class="info">LINE: ${m.lineId || "-"}</div>
-
-</div>
-`;
-  });
-
-  html += `
-</div>
-</body>
-</html>
-`;
-
-  const win = window.open("");
-  win.document.open();
-  win.document.write(html);
-  win.document.close();
-}
+ 
 </script>
 <!-- ===================== END V4 FEATURE ===================== -->
 
 
 </body>
 </html>
+
 
 

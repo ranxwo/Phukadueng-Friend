@@ -1658,18 +1658,28 @@ const dataToPrint = (filteredMembers && filteredMembers.length)
   ? filteredMembers
   : members;
 
-const membersData = dataToPrint.map(m => ({
-  fullname: m.fullname || "-",
-  nickname: m.nickname || "-",
-  phone: m.phone || "-",
-  email: m.email || "-",
-  line: m.lineId || "-",
-  image: m.profileImage || ""
-}));
+function exportCards() {
 
-localStorage.setItem("membersData", JSON.stringify(membersData));
+ let data = members;
 
-window.open("cards.html","_blank");
+ if (typeof filteredMembers !== "undefined" && filteredMembers.length > 0) {
+   data = filteredMembers;
+ }
+
+ const membersData = data.map(m => ({
+   fullname: m.fullname || "-",
+   nickname: m.nickname || "-",
+   phone: m.phone || "-",
+   email: m.email || "-",
+   line: m.lineId || "-",
+   image: m.profileImage || ""
+ }));
+
+ localStorage.setItem("membersData", JSON.stringify(membersData));
+
+ window.open("cards.html","_blank");
+
+}
  
 </script>
 <!-- ===================== END V4 FEATURE ===================== -->
@@ -1677,6 +1687,7 @@ window.open("cards.html","_blank");
 
 </body>
 </html>
+
 
 
 

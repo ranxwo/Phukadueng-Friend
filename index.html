@@ -1654,7 +1654,7 @@ function exportCards(){
     return;
   }
 
-  const membersData = members.map(m => ({
+ const membersData = filteredMembers.map(m => ({
   fullname: m.fullname || "-",
   nickname: m.nickname || "-",
   phone: m.phone || "-",
@@ -1663,11 +1663,9 @@ function exportCards(){
   image: m.profileImage || ""
 }));
 
-  localStorage.setItem("membersData", JSON.stringify(membersData));
+localStorage.setItem("membersData", JSON.stringify(membersData));
 
-  window.open("cards.html","_blank");
-
-}
+window.open("cards.html","_blank");
  
 </script>
 <!-- ===================== END V4 FEATURE ===================== -->
@@ -1675,6 +1673,7 @@ function exportCards(){
 
 </body>
 </html>
+
 
 
 

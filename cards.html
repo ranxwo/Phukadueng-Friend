@@ -185,6 +185,12 @@ function convertDrive(url){
     return "https://ui-avatars.com/api/?name=User&background=random";
   }
 
+  /* ถ้าเป็นลิงก์ Googleusercontent ให้ใช้ตรงๆ */
+  if(url.includes("googleusercontent.com")){
+    return url;
+  }
+
+  /* ถ้าเป็น Google Drive */
   if(url.includes("drive.google.com")){
 
     try{
@@ -209,9 +215,7 @@ function convertDrive(url){
   }
 
   return url;
-
 }
-
 /* ---------- สร้างการ์ด ---------- */
 
 const printArea = document.getElementById("printArea");

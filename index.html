@@ -1654,14 +1654,14 @@ function exportCards(){
     return;
   }
 
-  const membersData = data.map(m => ({
-    fullname: (m.firstName || "") + " " + (m.lastName || ""),
-    nickname: m.nickname || "-",
-    phone: m.phone || "-",
-    email: m.email || "-",
-    line: m.lineId || "-",
-    image: m.image || ""
-  }));
+  const membersData = members.map(m => ({
+  fullname: m.fullname || "-",
+  nickname: m.nickname || "-",
+  phone: m.phone || "-",
+  email: m.email || "-",
+  line: m.lineId || "-",
+  image: m.profileImage || ""
+}));
 
   localStorage.setItem("membersData", JSON.stringify(membersData));
 
@@ -1675,6 +1675,7 @@ function exportCards(){
 
 </body>
 </html>
+
 
 
 

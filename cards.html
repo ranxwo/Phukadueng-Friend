@@ -243,7 +243,7 @@ card.innerHTML=`
 
 <div class="info">
 
-<div class="fullname">${member.fullname||""}</div>
+<div class="fullname">${member.fullname || member.name || member.firstName + " " + member.lastName || ""}</div>
 
 <div class="nickname">${member.nickname||""}</div>
 

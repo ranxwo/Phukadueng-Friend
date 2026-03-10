@@ -159,11 +159,18 @@ display:block;
 
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
   members.forEach(m=>{
+
+m.fullname =
+m.fullname ||
+m.name ||
+((m.firstName||"") + " " + (m.lastName||"")).trim();
+
 m.nickname = m.nickname || "";
 m.phone = m.phone || "";
 m.line = m.line || m.lineId || "";
 m.email = m.email || "";
 m.image = m.image || m.profileImage || "";
+
 });
 
 if(members.length === 0){

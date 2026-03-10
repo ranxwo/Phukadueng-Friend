@@ -169,11 +169,33 @@ body{
 
 <script>
 
+/* ---------- อ่านข้อมูล ---------- */
+
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
 
 if(members.length === 0){
-document.body.innerHTML = "<h2 style='text-align:center'>ไม่มีข้อมูลสำหรับ Export</h2>";
+  document.body.innerHTML = "<h2 style='text-align:center'>ไม่มีข้อมูลสำหรับ Export</h2>";
 }
+
+/* ---------- แปลง Google Drive URL ---------- */
+
+function convertDrive(url){
+
+  if(!url) return "avatar.png";
+
+  if(url.includes("drive.google.com")){
+    try{
+      const id = url.split("/d/")[1].split("/")[0];
+      return "https://drive.google.com/uc?export=view&id=" + id;
+    }catch{
+      return url;
+    }
+  }
+
+  return url;
+}
+
+/* ---------- สร้างการ์ด ---------- */
 
 const printArea = document.getElementById("printArea");
 
@@ -181,68 +203,70 @@ let page;
 
 members.forEach((member, index)=>{
 
-if(index % 4 === 0){
-page = document.createElement("div");
-page.className = "container";
-printArea.appendChild(page);
-}
+  if(index % 4 === 0){
+    page = document.createElement("div");
+    page.className = "container";
+    printArea.appendChild(page);
+  }
 
-const card = document.createElement("div");
-card.className = "card";
+  const card = document.createElement("div");
+  card.className = "card";
 
-const qrId = "qr_" + index;
+  const qrId = "qr_" + index;
 
-card.innerHTML = `
+  const imageUrl = convertDrive(member.image);
 
-<div class="header">
-<img src="logo.png">
-<div class="group-name">กลุ่มเพื่อนภูกระดึง</div>
-</div>
+  card.innerHTML = `
 
-<div class="profile">
-<img src="${member.image.replace('/d/','/uc?export=view&id=')}">
-</div>
+  <div class="header">
+  <img src="logo.png">
+  <div class="group-name">กลุ่มเพื่อนภูกระดึง</div>
+  </div>
 
-<div class="info">
+  <div class="profile">
+  <img src="${imageUrl}">
+  </div>
 
-<div class="fullname">${member.fullname}</div>
+  <div class="info">
 
-<div class="nickname">${member.nickname}</div>
+  <div class="fullname">${member.fullname}</div>
 
-<div class="detail">
-<svg class="icon phone-icon" viewBox="0 0 24 24">
-<path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
-</svg>
-${member.phone}
-</div>
+  <div class="nickname">${member.nickname}</div>
 
-<div class="detail">
-<svg class="icon line-icon" viewBox="0 0 24 24">
-<path d="M12 2C6.5 2 2 5.7 2 10.3c0 4 3.2 7.3 7.5 8l-.4 2.7c-.1.5.4.8.8.5l3.2-2.3c5.1-.2 9-3.8 9-8.9C22 5.7 17.5 2 12 2z"/>
-</svg>
-${member.line}
-</div>
+  <div class="detail">
+  <svg class="icon phone-icon" viewBox="0 0 24 24">
+  <path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
+  </svg>
+  ${member.phone}
+  </div>
 
-<div class="detail email">
-<svg class="icon mail-icon" viewBox="0 0 24 24">
-<path d="M2 6l10 7 10-7v12H2z"/>
-</svg>
-${member.email}
-</div>
+  <div class="detail">
+  <svg class="icon line-icon" viewBox="0 0 24 24">
+  <path d="M12 2C6.5 2 2 5.7 2 10.3c0 4 3.2 7.3 7.5 8l-.4 2.7c-.1.5.4.8.8.5l3.2-2.3c5.1-.2 9-3.8 9-8.9C22 5.7 17.5 2 12 2z"/>
+  </svg>
+  ${member.line}
+  </div>
 
-</div>
+  <div class="detail email">
+  <svg class="icon mail-icon" viewBox="0 0 24 24">
+  <path d="M2 6l10 7 10-7v12H2z"/>
+  </svg>
+  ${member.email}
+  </div>
 
-<div id="${qrId}" class="qr"></div>
+  </div>
 
-`;
+  <div id="${qrId}" class="qr"></div>
 
-page.appendChild(card);
+  `;
 
-new QRCode(document.getElementById(qrId), {
-text:"https://line.me/ti/p/~" + member.line,
-width:200,
-height:200
-});
+  page.appendChild(card);
+
+  new QRCode(document.getElementById(qrId), {
+    text:"https://line.me/ti/p/~" + member.line,
+    width:200,
+    height:200
+  });
 
 });
 

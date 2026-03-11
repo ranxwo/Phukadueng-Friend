@@ -1666,7 +1666,8 @@ document.getElementById('LineID').value = member.lineId || '';
         params.append('birthday', document.getElementById('birthday').value);
         params.append('phone', "'" + document.getElementById('phone').value);
         params.append('email', document.getElementById('email').value);
-params.append('lineId', document.getElementById('LineID').value.trim());
+        params.append('lineId', document.getElementById('LineID').value.trim());
+        params.append('group', document.getElementById('group').value);
         params.append('recordDate', new Date().toISOString().split('T')[0]);
         
         if (currentImageBase64) {
@@ -1729,7 +1730,7 @@ const data = dataSource.map(m=>({
   "วันเกิด": m.birthday,
   "เบอร์โทร": m.phone,
   "Email": m.email,
-  "LineID": m.lineId
+  "LineID": m.lineId,
   "กลุ่ม": m.group
 }));
 
@@ -1824,6 +1825,7 @@ window.open("cards.html?pdf=true","_blank");
 
 </body>
 </html>
+
 
 
 

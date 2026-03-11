@@ -1764,31 +1764,6 @@ localStorage.setItem("membersData", JSON.stringify(membersData));
 window.open("cards.html?pdf=true","_blank");
 
 }
-
-function toggleDownloadMenu(){
-
-  const menu = document.getElementById("download-menu");
-
-  if(menu.style.display === "block"){
-    menu.style.display = "none";
-  }else{
-    menu.style.display = "block";
-  }
-
-}
-
-document.addEventListener("click", function(event){
-
-const menu = document.getElementById("download-menu");
-
-if(!event.target.closest("#download-menu") && 
-   !event.target.closest("button[onclick='toggleDownloadMenu()']")){
-
-menu.style.display = "none";
-
-}
-
-});
  
 </script>
 <!-- ===================== END V7 FEATURE ===================== -->
@@ -1796,6 +1771,7 @@ menu.style.display = "none";
 
 </body>
 </html>
+
 
 
 

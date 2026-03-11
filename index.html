@@ -879,24 +879,9 @@ class="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transit
 🪪 พิมพ์นามบัตร
 </button>
 
-<div style="position:relative; display:inline-block;">
-
-<button onclick="toggleDownloadMenu()" 
-class="px-3 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-sm">
-⬇️ ดาวน์โหลด
-</button>
-
-<div id="download-menu"
-style="display:none; position:absolute; top:110%; right:0; background:white; border:1px solid #ddd; border-radius:8px; padding:8px; z-index:999; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
-
-<button onclick="exportPDF()" 
-style="display:block; padding:6px 10px; width:100%; text-align:left;">
-📄 PDF
-</button>
-
 <button onclick="exportExcel()" 
-style="display:block; padding:6px 10px; width:100%; text-align:left;">
-📊 Excel
+class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+📊 ดาวน์โหลด Excel
 </button>
 
 </div>
@@ -1811,6 +1796,7 @@ menu.style.display = "none";
 
 </body>
 </html>
+
 
 
 

@@ -724,14 +724,35 @@ background:#28a745;
 background:#ff9800;
 }
 
-.group-family{
-background-color:#e8f5e9;
-border-color:#4CAF50;
+.group-filter{
+display:flex;
+gap:8px;
+margin-top:6px;
 }
 
-.group-friend{
-background-color:#e3f2fd;
-border-color:#2196F3;
+.group-btn{
+padding:6px 14px;
+border-radius:20px;
+border:1px solid #ddd;
+font-size:14px;
+cursor:pointer;
+background:white;
+}
+
+.group-btn.active{
+border:2px solid #2563eb;
+}
+
+.group-btn.family{
+background:#dcfce7;
+color:#166534;
+border-color:#16a34a;
+}
+
+.group-btn.friend{
+background:#dbeafe;
+color:#1e40af;
+border-color:#2563eb;
 }
    
   </style>
@@ -951,15 +972,19 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
 👥 กรองตามกลุ่ม
 </label>
 
-<select id="group-filter"
-class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
-onchange="filterMembers(); changeGroupColor();">
+<div class="group-filter">
 
-<option value="">ทุกกลุ่ม</option>
-<option value="ครอบครัว">ครอบครัว</option>
-<option value="เพื่อน">เพื่อน</option>
+<button class="group-btn active" onclick="setGroupFilter('')">
+ทั้งหมด
+</button>
 
-</select>
+<button class="group-btn family" onclick="setGroupFilter('ครอบครัว')">
+ครอบครัว
+</button>
+
+<button class="group-btn friend" onclick="setGroupFilter('เพื่อน')">
+เพื่อน
+</button>
 
 </div>
         
@@ -1847,13 +1872,26 @@ select.classList.add("group-friend");
 }
 
 }
- 
+
+ function setGroupFilter(group){
+
+filterGroup = group;
+
+document.querySelectorAll(".group-btn")
+.forEach(btn=>btn.classList.remove("active"));
+
+event.target.classList.add("active");
+
+filterMembers();
+
+}
 </script>
 <!-- ===================== END V7 FEATURE ===================== -->
 
 
 </body>
 </html>
+
 
 
 

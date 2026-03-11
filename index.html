@@ -906,7 +906,7 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
          🔍
         </div><input type="text" id="search-input" placeholder="ค้นหาด้วยชื่อ หรือ ชื่อเล่น..." class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all" oninput="filterMembers()"> <button onclick="clearSearch()" id="clear-search-btn" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors hidden" title="ล้างการค้นหา">✕</button>
        </div>
-       <div class="grid md:grid-cols-2 gap-3 mb-4">
+       <div class="grid md:grid-cols-3 gap-3 mb-4">
         <div>
          <label class="block text-xs font-semibold text-gray-600 mb-2">🚻 กรองตามเพศ</label>
          <div class="filter-gender-dropdown-wrapper">
@@ -918,8 +918,40 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
           </div><input type="hidden" id="filter-gender" value="">
          </div>
         </div>
-        <div><label for="filter-month" class="block text-xs font-semibold text-gray-600 mb-2">🎂 กรองตามเดือนเกิด</label> <select id="filter-month" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-sm" onchange="filterMembers()"> <option value="">ทั้งปี</option> <option value="1">มกราคม</option> <option value="2">กุมภาพันธ์</option> <option value="3">มีนาคม</option> <option value="4">เมษายน</option> <option value="5">พฤษภาคม</option> <option value="6">มิถุนายน</option> <option value="7">กรกฎาคม</option> <option value="8">สิงหาคม</option> <option value="9">กันยายน</option> <option value="10">ตุลาคม</option> <option value="11">พฤศจิกายน</option> <option value="12">ธันวาคม</option> </select>
+        <div><label for="filter-month" class="block text-xs font-semibold text-gray-600 mb-2">🎂 กรองตามเดือนเกิด</label> <select id="filter-month" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-sm" onchange="filterMembers()"> 
+         <option value="">ทั้งปี</option> 
+         <option value="1">มกราคม</option> 
+         <option value="2">กุมภาพันธ์</option> 
+         <option value="3">มีนาคม</option> 
+         <option value="4">เมษายน</option> 
+         <option value="5">พฤษภาคม</option> 
+         <option value="6">มิถุนายน</option> 
+         <option value="7">กรกฎาคม</option> 
+         <option value="8">สิงหาคม</option> 
+         <option value="9">กันยายน</option> 
+         <option value="10">ตุลาคม</option> 
+         <option value="11">พฤศจิกายน</option> 
+         <option value="12">ธันวาคม</option> 
+        </select>
         </div>
+<div>
+
+<label class="block text-xs font-semibold text-gray-600 mb-2">
+👥 กรองตามกลุ่ม
+</label>
+
+<select id="group-filter"
+class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
+onchange="filterMembers()">
+
+<option value="">ทุกกลุ่ม</option>
+<option value="ครอบครัว">ครอบครัว</option>
+<option value="เพื่อน">เพื่อน</option>
+
+</select>
+
+</div>
+        
        </div>
        <div id="search-info" class="mt-2 text-sm text-gray-500 hidden">
         พบ <span id="search-count" class="font-semibold text-blue-600">0</span> รายการ (แสดง 10 รายการล่าสุด)
@@ -1294,6 +1326,7 @@ async function previewImage(input) {
       searchQuery = searchInput.value.trim().toLowerCase();
       filterGender = filterGenderInput.value;
       filterMonth = document.getElementById('filter-month').value;
+      filterGroup = document.getElementById('group-filter').value;
       
       if (searchQuery.length > 0) {
         document.getElementById('clear-search-btn').classList.remove('hidden');
@@ -1330,6 +1363,14 @@ async function previewImage(input) {
         activeFilters.appendChild(badge);
         hasActiveFilters = true;
       }
+
+     if (filterGroup) {
+       const badge = document.createElement('span');
+       badge.className = 'filter-badge';
+       badge.textContent = '👥 ' + filterGroup;
+       activeFilters.appendChild(badge);
+       hasActiveFilters = true;
+     }
 
       if (hasActiveFilters) {
         filterInfo.classList.remove('hidden');
@@ -1378,7 +1419,13 @@ async function previewImage(input) {
           matchesMonth = birthMonth === parseInt(filterMonth);
         }
 
-        return matchesSearch && matchesGender && matchesMonth;
+       // Group filter
+       let matchesGroup = true;
+       if (filterGroup) {
+         matchesGroup = member.group === filterGroup;
+        }
+
+        return matchesSearch && matchesGender && matchesMonth && matchesGroup;
       });
 
       // Sort by record date - latest first (but display birthday)
@@ -1777,6 +1824,7 @@ window.open("cards.html?pdf=true","_blank");
 
 </body>
 </html>
+
 
 
 

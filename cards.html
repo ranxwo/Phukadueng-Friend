@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card V6</title>
+<title>Business Card V5</title>
 
 <style>
 
@@ -147,28 +146,16 @@ height:100%!important;
 display:block;
 }
 
-button{
-position:fixed;
-top:20px;
-right:20px;
-padding:10px 18px;
-border:none;
-border-radius:8px;
-background:#ff7a00;
-color:white;
-font-size:14px;
-cursor:pointer;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <div id="printArea"></div>
 
-<button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+<br>
+
+<button onclick="window.print()">Print PDF</button>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
@@ -258,15 +245,53 @@ card.innerHTML=`
 </div>
 
 <div class="profile">
-<img src="${imageUrl}">
+<img src="${imageUrl}" loading="lazy">
 </div>
 
 <div class="info">
 
-<div class="fullname">${member.fullname}</div>
+<div class="fullname">${member.fullname || ""}</div>
 
-<div class="nickname">${member.nickname}</div>
+<div class="nickname">${member.nickname||""}</div>
 
 <div class="detail">
 <svg class="icon phone-icon" viewBox="0 0 24 24">
-<path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1
+<path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
+</svg>
+${member.phone||""}
+</div>
+
+<div class="detail">
+<svg class="icon line-icon" viewBox="0 0 24 24">
+<path d="M12 2C6.5 2 2 5.7 2 10.3c0 4 3.2 7.3 7.5 8l-.4 2.7c-.1.5.4.8.8.5l3.2-2.3c5.1-.2 9-3.8 9-8.9C22 5.7 17.5 2 12 2z"/>
+</svg>
+${member.line||""}
+</div>
+
+<div class="detail email">
+<svg class="icon mail-icon" viewBox="0 0 24 24">
+<path d="M2 6l10 7 10-7v12H2z"/>
+</svg>
+${member.email||""}
+</div>
+
+</div>
+
+<div id="${qrId}" class="qr"></div>
+
+`;
+
+page.appendChild(card);
+
+new QRCode(document.getElementById(qrId),{
+text:"https://line.me/ti/p/~"+(member.line||""),
+width:200,
+height:200
+});
+
+});
+
+</script>
+
+</body>
+</html>

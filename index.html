@@ -1776,11 +1776,7 @@ const membersData = dataToPrint.map(m => ({
 
 localStorage.setItem("membersData", JSON.stringify(membersData));
 
-const printWindow = window.open("cards.html","_blank");
-
-printWindow.onload = function(){
-printWindow.print();
-};
+window.open("cards.html?pdf=true","_blank");
 
 }
 
@@ -1815,6 +1811,7 @@ menu.style.display = "none";
 
 </body>
 </html>
+
 
 
 

@@ -871,23 +871,37 @@ placeholder="yourlineid">
 
 <button onclick="exportCards()" 
 class="px-3 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-sm">
-🪪 Cards
+🪪 พิมพ์รายชื่อ
 </button>
 
 <button onclick="exportCards10()" 
 class="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm">
-🪪 x10
+🪪 พิมพ์นามบัตร
 </button>
 
-<button onclick="exportPDF()" 
+<div style="position:relative; display:inline-block;">
+
+<button onclick="toggleDownloadMenu()" 
 class="px-3 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-sm">
+⬇️ ดาวน์โหลด
+</button>
+
+<div id="download-menu"
+style="display:none; position:absolute; top:110%; right:0; background:white; border:1px solid #ddd; border-radius:8px; padding:8px; z-index:999; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+
+<button onclick="exportPDF()" 
+style="display:block; padding:6px 10px; width:100%; text-align:left;">
 📄 PDF
 </button>
 
 <button onclick="exportExcel()" 
-class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-📥 Excel
+style="display:block; padding:6px 10px; width:100%; text-align:left;">
+📊 Excel
 </button>
+
+</div>
+
+</div>
 
 <button onclick="loadMembers()" 
 class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
@@ -1666,16 +1680,20 @@ params.append('lineId', document.getElementById('LineID').value.trim());
 <script>
  const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%239ca3af'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='22' fill='%239ca3af'/%3E%3C/svg%3E";
 function exportExcel(){
-  const data = filteredMembers.map(m=>({
-    "ชื่อ": m.firstName,
-    "นามสกุล": m.lastName,
-    "ชื่อเล่น": m.nickname,
-    "เพศ": m.gender,
-    "วันเกิด": m.birthday,
-    "เบอร์โทร": m.phone,
-    "Email": m.email,
-    "LineID": m.lineId
-  }));
+const dataSource = (filteredMembers && filteredMembers.length)
+  ? filteredMembers
+  : members;
+
+const data = dataSource.map(m=>({
+  "ชื่อ": m.firstName,
+  "นามสกุล": m.lastName,
+  "ชื่อเล่น": m.nickname,
+  "เพศ": m.gender,
+  "วันเกิด": m.birthday,
+  "เบอร์โทร": m.phone,
+  "Email": m.email,
+  "LineID": m.lineId
+}));
 
   const ws = XLSX.utils.json_to_sheet(data);
   const wb = XLSX.utils.book_new();
@@ -1714,7 +1732,9 @@ window.open("cards.html","_blank");
 
 function exportCards10(){
 
-const dataToPrint = filteredMembers.length ? filteredMembers : members;
+const dataToPrint = (filteredMembers && filteredMembers.length)
+  ? filteredMembers
+  : members;
 
 let list = [];
 
@@ -1741,23 +1761,60 @@ window.open("cards.html","_blank");
 
 function exportPDF(){
 
-exportCards();
+const dataToPrint = (filteredMembers && filteredMembers.length)
+  ? filteredMembers
+  : members;
 
-setTimeout(()=>{
+const membersData = dataToPrint.map(m => ({
+  fullname: (m.firstName || "") + " " + (m.lastName || ""),
+  nickname: m.nickname || "-",
+  phone: m.phone || "-",
+  email: m.email || "-",
+  line: m.lineId || "-",
+  image: m.profileImage || ""
+}));
+
+localStorage.setItem("membersData", JSON.stringify(membersData));
+
 const printWindow = window.open("cards.html","_blank");
 
 printWindow.onload = function(){
 printWindow.print();
 };
 
-},500);
+}
+
+function toggleDownloadMenu(){
+
+  const menu = document.getElementById("download-menu");
+
+  if(menu.style.display === "block"){
+    menu.style.display = "none";
+  }else{
+    menu.style.display = "block";
+  }
 
 }
+
+document.addEventListener("click", function(event){
+
+const menu = document.getElementById("download-menu");
+
+if(!event.target.closest("#download-menu") && 
+   !event.target.closest("button[onclick='toggleDownloadMenu()']")){
+
+menu.style.display = "none";
+
+}
+
+});
+ 
 </script>
-<!-- ===================== END V6 FEATURE ===================== -->
+<!-- ===================== END V7 FEATURE ===================== -->
 
 
 </body>
 </html>
+
 
 

@@ -1683,6 +1683,7 @@ const data = dataSource.map(m=>({
   "เบอร์โทร": m.phone,
   "Email": m.email,
   "LineID": m.lineId
+  "กลุ่ม": m.group
 }));
 
   const ws = XLSX.utils.json_to_sheet(data);
@@ -1776,6 +1777,7 @@ window.open("cards.html?pdf=true","_blank");
 
 </body>
 </html>
+
 
 
 

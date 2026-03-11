@@ -908,7 +908,7 @@ placeholder="yourlineid">
 
 <div class="flex items-center gap-2">
 
-<button onclick="loadMembers()" 
+<button onclick="refreshMembers()"
 class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
 title="รีเฟรช">
 🔄
@@ -1885,12 +1885,28 @@ event.target.classList.add("active");
 filterMembers();
 
 }
+
+function refreshMembers(){
+
+document.getElementById("group-filter").value = "";
+document.getElementById("gender-filter").value = "";
+document.getElementById("month-filter").value = "";
+
+filterGroup = "";
+filterGender = "";
+filterMonth = "";
+
+loadMembers();
+
+}
+ 
 </script>
 <!-- ===================== END V7 FEATURE ===================== -->
 
 
 </body>
 </html>
+
 
 
 

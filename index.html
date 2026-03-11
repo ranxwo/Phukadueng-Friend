@@ -969,6 +969,7 @@ title="รีเฟรช">
     const API_URL = 'https://script.google.com/macros/s/AKfycbyM6Z7vSkpZlBuMybV9qu1Hn6WRkpIX7XvmD4l3T6QS_H8to6Tg_qPasts0fd1eX-sD/exec';
     
     let members = [];
+    let filteredMembers = [];
     let deleteTargetId = null;
     let currentImageBase64 = null;
     let currentImageName = null;
@@ -1714,7 +1715,7 @@ window.open("cards.html","_blank");
 
 function exportCards10(){
 
-const dataToPrint = selectedMembers.length ? selectedMembers : members;
+const dataToPrint = filteredMembers.length ? filteredMembers : members;
 
 let list = [];
 
@@ -1744,13 +1745,19 @@ function exportPDF(){
 exportCards();
 
 setTimeout(()=>{
-window.print();
-},800);
+const printWindow = window.open("cards.html","_blank");
 
-} 
+printWindow.onload = function(){
+printWindow.print();
+};
+
+},500);
+
+}
 </script>
 <!-- ===================== END V6 FEATURE ===================== -->
 
 
 </body>
 </html>
+

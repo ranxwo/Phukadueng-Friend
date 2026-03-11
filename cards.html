@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Business Card V5</title>
+<title>Business Card V6</title>
 
 <style>
 
@@ -146,26 +147,40 @@ height:100%!important;
 display:block;
 }
 
+button{
+position:fixed;
+top:20px;
+right:20px;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#ff7a00;
+color:white;
+font-size:14px;
+cursor:pointer;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div id="printArea"></div>
 
-<br>
-
-<button onclick="window.print()">Print PDF</button>
+<button onclick="downloadPDF()">Download PDF</button>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
 
-/* อ่านข้อมูล */
-
 const members = JSON.parse(localStorage.getItem("membersData")) || [];
-  members.forEach(m=>{
 
+members.forEach(m=>{
 m.fullname =
 m.fullname ||
 m.name ||
@@ -176,14 +191,11 @@ m.phone = m.phone || "";
 m.line = m.line || m.lineId || "";
 m.email = m.email || "";
 m.image = m.image || m.profileImage || "";
-
 });
 
 if(members.length === 0){
 document.body.innerHTML="<h2 style='text-align:center'>ไม่มีข้อมูลสำหรับ Export</h2>";
 }
-
-/* แปลงลิงก์รูป */
 
 function convertDrive(url){
 
@@ -214,8 +226,6 @@ return "https://drive.google.com/thumbnail?id="+id+"&sz=w400";
 return url;
 
 }
-
-/* สร้างการ์ด */
 
 const printArea=document.getElementById("printArea");
 
@@ -249,29 +259,29 @@ card.innerHTML=`
 
 <div class="info">
 
-<div class="fullname">${member.fullname || member.name || member.firstName + " " + member.lastName || ""}</div>
+<div class="fullname">${member.fullname}</div>
 
-<div class="nickname">${member.nickname||""}</div>
+<div class="nickname">${member.nickname}</div>
 
 <div class="detail">
 <svg class="icon phone-icon" viewBox="0 0 24 24">
 <path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.5 21 3 13.5 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.6 3.6a1 1 0 01-.25 1z"/>
 </svg>
-${member.phone||""}
+${member.phone}
 </div>
 
 <div class="detail">
 <svg class="icon line-icon" viewBox="0 0 24 24">
 <path d="M12 2C6.5 2 2 5.7 2 10.3c0 4 3.2 7.3 7.5 8l-.4 2.7c-.1.5.4.8.8.5l3.2-2.3c5.1-.2 9-3.8 9-8.9C22 5.7 17.5 2 12 2z"/>
 </svg>
-${member.line||""}
+${member.line}
 </div>
 
 <div class="detail email">
 <svg class="icon mail-icon" viewBox="0 0 24 24">
 <path d="M2 6l10 7 10-7v12H2z"/>
 </svg>
-${member.email||""}
+${member.email}
 </div>
 
 </div>
@@ -289,6 +299,27 @@ height:200
 });
 
 });
+
+async function downloadPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const element = document.getElementById("printArea");
+
+const canvas = await html2canvas(element,{scale:2});
+
+const imgData = canvas.toDataURL("image/png");
+
+const pdf = new jsPDF('p','mm','a4');
+
+const imgWidth = 210;
+const imgHeight = canvas.height * imgWidth / canvas.width;
+
+pdf.addImage(imgData,'PNG',0,0,imgWidth,imgHeight);
+
+pdf.save("cards.pdf");
+
+}
 
 </script>
 

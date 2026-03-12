@@ -1683,6 +1683,8 @@ async function previewImage(input) {
       clearProfileImage();
       document.getElementById('form-mode-title').textContent = 'เพิ่มสมาชิกใหม่';
       document.getElementById('submit-btn-text').textContent = '💾 บันทึกข้อมูล';
+      document.getElementById('group').value = 'เพื่อน';
+      changeGroupColor('group');
     }
 
     document.getElementById('member-form').addEventListener('submit', async function(e) {
@@ -1884,7 +1886,8 @@ select.classList.add("group-friend");
 
 }
 
-if(document.getElementById('group')){
+const groupSelect = document.getElementById('group');
+if(groupSelect){
 changeGroupColor('group');
 }
  
@@ -1902,7 +1905,7 @@ function refreshAll() {
     filterGenderInput.value = '';
   }
   document.getElementById('filter-gender-display').textContent = 'ทั้งหมด';
-  changeGroupColor();
+  changeGroupColor('group');
   loadMembers();
 
 }
@@ -1915,24 +1918,16 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js")
   .then(() => console.log("Service Worker Registered"));
 }
+
+ window.addEventListener("load", function(){
+
+document.getElementById('group').value = 'เพื่อน';
+changeGroupColor('group');
+
+});
+ 
 </script>
   
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1847,6 +1847,27 @@ select.classList.add("group-friend");
 }
 
 }
+
+function refreshMembers() {
+
+  // ล้างค่ากรองกลุ่ม
+  document.getElementById('group-filter').value = '';
+
+  // ล้างการค้นหา
+  document.getElementById('search-input').value = '';
+
+  // ล้างเดือน
+  document.getElementById('filter-month').value = '';
+
+  // ล้างเพศ
+  filterGender = '';
+
+  // รีเซ็ตสี dropdown
+  changeGroupColor();
+
+  // รีเฟรชการแสดงผลสมาชิก
+  filterMembers();
+}
  
 </script>
 <!-- ===================== END V7 FEATURE ===================== -->
@@ -1854,4 +1875,5 @@ select.classList.add("group-friend");
 
 </body>
 </html>
+
 

@@ -1850,8 +1850,11 @@ select.classList.add("group-friend");
 
 function refreshMembers() {
 
-  // ล้างค่ากรองกลุ่ม
-  document.getElementById('group-filter').value = '';
+  // ล้าง dropdown กลุ่ม
+  document.getElementById('group-filter').selectedIndex = 0;
+
+  // รีเซ็ตตัวแปรกลุ่ม
+  filterGroup = '';
 
   // ล้างการค้นหา
   document.getElementById('search-input').value = '';
@@ -1862,10 +1865,8 @@ function refreshMembers() {
   // ล้างเพศ
   filterGender = '';
 
-  // รีเซ็ตสี dropdown
   changeGroupColor();
 
-  // รีเฟรชการแสดงผลสมาชิก
   filterMembers();
 }
  
@@ -1875,5 +1876,6 @@ function refreshMembers() {
 
 </body>
 </html>
+
 
 

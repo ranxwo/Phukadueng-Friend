@@ -929,7 +929,8 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
           </div><input type="hidden" id="filter-gender" value="">
          </div>
         </div>
-        <div><label for="filter-month" class="block text-xs font-semibold text-gray-600 mb-2">🎂 กรองตามเดือนเกิด</label> <select id="filter-month" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-sm" onchange="filterMembers()"> 
+        <div><label for="filter-month" class="block text-xs font-semibold text-gray-600 mb-2">🎂 กรองตามเดือนเกิด</label> 
+         <select id="filter-month" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl input-focus focus:border-blue-500 focus:outline-none transition-all bg-white text-sm" onchange="filterMembers()"> 
          <option value="">ทั้งปี</option> 
          <option value="1">มกราคม</option> 
          <option value="2">กุมภาพันธ์</option> 
@@ -1849,14 +1850,11 @@ select.classList.add("group-friend");
 }
 
 function refreshAll() {
-
-  // รีเซ็ตตัวแปร filter
   searchQuery = '';
   filterGender = '';
   filterMonth = '';
   filterGroup = '';
 
-  // รีเซ็ต input
   document.getElementById('search-input').value = '';
   document.getElementById('filter-month').value = '';
   document.getElementById('group-filter').selectedIndex = 0;
@@ -1864,15 +1862,10 @@ function refreshAll() {
   if (filterGenderInput) {
     filterGenderInput.value = '';
   }
-
-  // รีเซ็ตสี dropdown
+  document.getElementById('filter-gender-display').textContent = 'ทั้งหมด';
   changeGroupColor();
-
-  // โหลดข้อมูลใหม่
   loadMembers();
 
-  // แสดงผลใหม่
-  filterMembers();
 }
  
 </script>
@@ -1881,6 +1874,7 @@ function refreshAll() {
 
 </body>
 </html>
+
 
 
 

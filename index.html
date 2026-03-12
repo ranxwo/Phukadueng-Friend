@@ -1850,23 +1850,28 @@ select.classList.add("group-friend");
 
 function refreshMembers() {
 
-  // ล้าง dropdown กลุ่ม
-  document.getElementById('group-filter').selectedIndex = 0;
+  // รีเซ็ต dropdown กลุ่ม
+  const groupSelect = document.getElementById('group-filter');
+  groupSelect.selectedIndex = 0;
+  groupSelect.value = '';
 
-  // รีเซ็ตตัวแปรกลุ่ม
+  // รีเซ็ตตัวแปร filter
+  searchQuery = '';
+  filterGender = '';
+  filterMonth = '';
   filterGroup = '';
 
-  // ล้างการค้นหา
+  // รีเซ็ต input ต่างๆ
   document.getElementById('search-input').value = '';
-
-  // ล้างเดือน
   document.getElementById('filter-month').value = '';
 
-  // ล้างเพศ
-  filterGender = '';
+  // ถ้ามี dropdown เพศ
+  filterGenderInput.value = '';
 
+  // อัปเดตสี dropdown
   changeGroupColor();
 
+  // รีเรนเดอร์ใหม่
   filterMembers();
 }
  
@@ -1876,6 +1881,7 @@ function refreshMembers() {
 
 </body>
 </html>
+
 
 
 

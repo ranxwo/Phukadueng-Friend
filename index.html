@@ -887,9 +887,9 @@ placeholder="yourlineid">
 
 <div class="flex items-center gap-2">
 
-<button onclick="refreshMembers(); loadMembers();" 
+<button onclick="refreshAll()" 
 class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
-title="รีเฟรช">
+title="รีเฟรชทั้งหมด">
 🔄
 </button>
  
@@ -1848,12 +1848,7 @@ select.classList.add("group-friend");
 
 }
 
-function refreshMembers() {
-
-  // รีเซ็ต dropdown กลุ่ม
-  const groupSelect = document.getElementById('group-filter');
-  groupSelect.selectedIndex = 0;
-  groupSelect.value = '';
+function refreshAll() {
 
   // รีเซ็ตตัวแปร filter
   searchQuery = '';
@@ -1861,17 +1856,22 @@ function refreshMembers() {
   filterMonth = '';
   filterGroup = '';
 
-  // รีเซ็ต input ต่างๆ
+  // รีเซ็ต input
   document.getElementById('search-input').value = '';
   document.getElementById('filter-month').value = '';
+  document.getElementById('group-filter').selectedIndex = 0;
 
-  // ถ้ามี dropdown เพศ
-  filterGenderInput.value = '';
+  if (filterGenderInput) {
+    filterGenderInput.value = '';
+  }
 
-  // อัปเดตสี dropdown
+  // รีเซ็ตสี dropdown
   changeGroupColor();
 
-  // รีเรนเดอร์ใหม่
+  // โหลดข้อมูลใหม่
+  loadMembers();
+
+  // แสดงผลใหม่
   filterMembers();
 }
  
@@ -1881,6 +1881,7 @@ function refreshMembers() {
 
 </body>
 </html>
+
 
 
 

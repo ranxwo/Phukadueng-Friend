@@ -1069,7 +1069,7 @@ onchange="filterMembers(); changeGroupColor('group-filter');">
     let searchQuery = '';
     let filterGender = '';
     let filterMonth = '';
-    let filterGroup = '';
+    let filterGroup = 'เพื่อน';
 
     const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
@@ -1358,6 +1358,7 @@ async function previewImage(input) {
           filterGenderInput.value = '';
           filterGenderDisplay.textContent = 'ทั้งหมด';
           document.getElementById('filter-month').value = '';
+          document.getElementById('group-filter').value = 'เพื่อน';
           document.getElementById('clear-search-btn').classList.add('hidden');
           document.getElementById('search-info').classList.add('hidden');
           document.getElementById('filter-info').classList.add('hidden');

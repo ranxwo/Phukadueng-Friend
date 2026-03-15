@@ -1478,11 +1478,8 @@ async function previewImage(input) {
         }
 
        // Group filter
-       let matchesGroup = true;
-       if (filterGroup) {
-         matchesGroup = member.group === filterGroup;
-        }
-
+       // Group filter (เฉพาะเพื่อน)
+        let matchesGroup = member.group === 'เพื่อน';
         return matchesSearch && matchesGender && matchesMonth && matchesGroup;
       });
 

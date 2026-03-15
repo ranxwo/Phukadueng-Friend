@@ -1456,6 +1456,7 @@ async function previewImage(input) {
 
       filteredMembers = members.filter(member => {
         // Search filter
+       console.log(member.group);
         let matchesSearch = true;
         if (searchQuery.length > 0) {
           const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();

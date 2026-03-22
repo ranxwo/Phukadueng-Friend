@@ -1344,7 +1344,9 @@ async function previewImage(input) {
         loadingState.classList.add('hidden');
 
         if (data.status === 'success' && data.data && data.data.length > 0) {
-          members = data.data;
+          members = data.data.filter(m => 
+  (m.group || '').toString().trim() === 'เพื่อน'
+);
           searchQuery = '';
           filterGender = '';
           filterMonth = '';
@@ -1357,7 +1359,7 @@ async function previewImage(input) {
           document.getElementById('clear-search-btn').classList.add('hidden');
           document.getElementById('search-info').classList.add('hidden');
           document.getElementById('filter-info').classList.add('hidden');
-          renderMembers();
+          filterMembers();
           membersContainer.classList.remove('hidden');
           stats.classList.remove('hidden');
           document.getElementById('total-members').textContent = members.length;
@@ -1450,7 +1452,7 @@ async function previewImage(input) {
 
       filteredMembers = members.filter(member => {
         // Search filter
-       if ((member.group || '').trim() !== 'เพื่อน') return false;
+       if (!JSON.stringify(member).includes('เพื่อน')) return false;
         let matchesSearch = true;
         if (searchQuery.length > 0) {
           const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();

@@ -1350,7 +1350,7 @@ async function previewImage(input) {
         loadingState.classList.add('hidden');
 
         if (data.status === 'success' && data.data && data.data.length > 0) {
-          members = data.data;
+          members = data.data.filter(m => m.group === 'เพื่อน');
           searchQuery = '';
           filterGender = '';
           filterMonth = '';

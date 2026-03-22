@@ -991,6 +991,19 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
 <div>
 
 <label class="block text-xs font-semibold text-gray-600 mb-2">
+👥 กรองตามกลุ่ม
+</label>
+
+<select id="group-filter"
+ class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
+onchange="filterMembers(); changeGroupColor('group-filter');">
+
+<option value="">ทุกกลุ่ม</option>
+<option value="ครอบครัว">ครอบครัว</option>
+<option value="เพื่อน">เพื่อน</option>
+<option value="ผู้ติดต่อ">ผู้ติดต่อ</option>
+ 
+</select>
 
 </div>
         
@@ -1056,7 +1069,7 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
     let searchQuery = '';
     let filterGender = '';
     let filterMonth = '';
-    let filterGroup = 'เพื่อน';
+    let filterGroup = '';
 
     const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
@@ -1463,8 +1476,10 @@ async function previewImage(input) {
         }
 
        // Group filter
-       // กรองเฉพาะกลุ่มเพื่อน
-        const matchesGroup = member.group === 'เพื่อน';
+       let matchesGroup = true;
+       if (filterGroup) {
+         matchesGroup = member.group === filterGroup;
+        }
 
         return matchesSearch && matchesGender && matchesMonth && matchesGroup;
       });

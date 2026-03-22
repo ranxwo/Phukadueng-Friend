@@ -1450,6 +1450,7 @@ async function previewImage(input) {
 
       filteredMembers = members.filter(member => {
         // Search filter
+       if ((member.group || '').trim() !== 'เพื่อน') return false;
         let matchesSearch = true;
         if (searchQuery.length > 0) {
           const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
@@ -1471,13 +1472,7 @@ async function previewImage(input) {
           matchesMonth = birthMonth === parseInt(filterMonth);
         }
 
-       // Group filter
-       let matchesGroup = true;
-       if (filterGroup) {
-         matchesGroup = member.group === filterGroup;
-        }
-
-        return matchesSearch && matchesGender && matchesMonth && matchesGroup;
+        return matchesSearch && matchesGender && matchesMonth;
       });
 
       // Sort by record date - latest first (but display birthday)

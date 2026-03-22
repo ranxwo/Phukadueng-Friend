@@ -904,10 +904,7 @@ onchange="changeGroupColor('group')"
 required
 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus group-friend">
 
-<option value="">-- เลือกกลุ่ม --</option>
-<option value="ครอบครัว">ครอบครัว</option>
 <option value="เพื่อน" selected>เพื่อน</option>
-<option value="ผู้ติดต่อ">ผู้ติดต่อ</option>
 
 </select>
 </div>
@@ -995,14 +992,11 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
 </label>
 
 <select id="group-filter"
- class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
-onchange="filterMembers(); changeGroupColor('group-filter');">
+class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
+onchange="filterMembers();">
 
-<option value="">ทุกกลุ่ม</option>
-<option value="ครอบครัว">ครอบครัว</option>
-<option value="เพื่อน">เพื่อน</option>
-<option value="ผู้ติดต่อ">ผู้ติดต่อ</option>
- 
+<option value="เพื่อน" selected>เพื่อน</option>
+
 </select>
 
 </div>
@@ -1354,6 +1348,8 @@ async function previewImage(input) {
           searchQuery = '';
           filterGender = '';
           filterMonth = '';
+          filterGroup = 'เพื่อน';
+          document.getElementById('group-filter').value = 'เพื่อน';
           document.getElementById('search-input').value = '';
           filterGenderInput.value = '';
           filterGenderDisplay.textContent = 'ทั้งหมด';
@@ -1382,7 +1378,7 @@ async function previewImage(input) {
       searchQuery = searchInput.value.trim().toLowerCase();
       filterGender = filterGenderInput.value;
       filterMonth = document.getElementById('filter-month').value;
-      filterGroup = document.getElementById('group-filter').value;
+      filterGroup = 'เพื่อน';
       
       if (searchQuery.length > 0) {
         document.getElementById('clear-search-btn').classList.remove('hidden');
@@ -1617,7 +1613,7 @@ async function previewImage(input) {
       document.getElementById('phone').value = member.phone;
       document.getElementById('email').value = member.email;
       document.getElementById('LineID').value = member.lineId || '';
-      document.getElementById('group').value = member.group || '';
+      document.getElementById('group').value = 'เพื่อน';
       changeGroupColor('group');
       
       if (member.profileImage) {
@@ -1913,11 +1909,11 @@ function refreshAll() {
   searchQuery = '';
   filterGender = '';
   filterMonth = '';
-  filterGroup = '';
+  filterGroup = 'เพื่อน';
 
   document.getElementById('search-input').value = '';
   document.getElementById('filter-month').value = '';
-  document.getElementById('group-filter').selectedIndex = 0;
+  document.getElementById('group-filter').value = 'เพื่อน';
 
   if (filterGenderInput) {
     filterGenderInput.value = '';

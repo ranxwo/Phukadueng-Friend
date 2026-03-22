@@ -904,7 +904,10 @@ onchange="changeGroupColor('group')"
 required
 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus group-friend">
 
+<option value="">-- เลือกกลุ่ม --</option>
+<option value="ครอบครัว">ครอบครัว</option>
 <option value="เพื่อน" selected>เพื่อน</option>
+<option value="ผู้ติดต่อ">ผู้ติดต่อ</option>
 
 </select>
 </div>
@@ -992,11 +995,14 @@ class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transitio
 </label>
 
 <select id="group-filter"
-class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
-onchange="filterMembers();">
+ class="w-full px-3 py-2.5 border border-gray-300 rounded-xl"
+onchange="filterMembers(); changeGroupColor('group-filter');">
 
-<option value="เพื่อน" selected>เพื่อน</option>
-
+<option value="">ทุกกลุ่ม</option>
+<option value="ครอบครัว">ครอบครัว</option>
+<option value="เพื่อน">เพื่อน</option>
+<option value="ผู้ติดต่อ">ผู้ติดต่อ</option>
+ 
 </select>
 
 </div>
@@ -1063,7 +1069,7 @@ onchange="filterMembers();">
     let searchQuery = '';
     let filterGender = '';
     let filterMonth = '';
-    let filterGroup = 'เพื่อน';
+    let filterGroup = '';
 
     const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
@@ -1344,14 +1350,14 @@ async function previewImage(input) {
         loadingState.classList.add('hidden');
 
         if (data.status === 'success' && data.data && data.data.length > 0) {
-          members = data.data.filter(m => 
-  (m.group || '').toString().trim() === 'เพื่อน'
-);
+console.log('BEFORE:', data.data.length);
+
+members = data.data.filter(m => m.group === 'เพื่อน');
+
+console.log('AFTER:', members.length);
           searchQuery = '';
           filterGender = '';
           filterMonth = '';
-          filterGroup = 'เพื่อน';
-          document.getElementById('group-filter').value = 'เพื่อน';
           document.getElementById('search-input').value = '';
           filterGenderInput.value = '';
           filterGenderDisplay.textContent = 'ทั้งหมด';
@@ -1359,7 +1365,7 @@ async function previewImage(input) {
           document.getElementById('clear-search-btn').classList.add('hidden');
           document.getElementById('search-info').classList.add('hidden');
           document.getElementById('filter-info').classList.add('hidden');
-          filterMembers();
+          renderMembers();
           membersContainer.classList.remove('hidden');
           stats.classList.remove('hidden');
           document.getElementById('total-members').textContent = members.length;
@@ -1380,7 +1386,7 @@ async function previewImage(input) {
       searchQuery = searchInput.value.trim().toLowerCase();
       filterGender = filterGenderInput.value;
       filterMonth = document.getElementById('filter-month').value;
-      filterGroup = 'เพื่อน';
+      filterGroup = document.getElementById('group-filter').value;
       
       if (searchQuery.length > 0) {
         document.getElementById('clear-search-btn').classList.remove('hidden');
@@ -1452,7 +1458,6 @@ async function previewImage(input) {
 
       filteredMembers = members.filter(member => {
         // Search filter
-       if (!JSON.stringify(member).includes('เพื่อน')) return false;
         let matchesSearch = true;
         if (searchQuery.length > 0) {
           const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
@@ -1474,7 +1479,13 @@ async function previewImage(input) {
           matchesMonth = birthMonth === parseInt(filterMonth);
         }
 
-        return matchesSearch && matchesGender && matchesMonth;
+       // Group filter
+       let matchesGroup = true;
+       if (filterGroup) {
+         matchesGroup = member.group === filterGroup;
+        }
+
+        return matchesSearch && matchesGender && matchesMonth && matchesGroup;
       });
 
       // Sort by record date - latest first (but display birthday)
@@ -1610,7 +1621,7 @@ async function previewImage(input) {
       document.getElementById('phone').value = member.phone;
       document.getElementById('email').value = member.email;
       document.getElementById('LineID').value = member.lineId || '';
-      document.getElementById('group').value = 'เพื่อน';
+      document.getElementById('group').value = member.group || '';
       changeGroupColor('group');
       
       if (member.profileImage) {
@@ -1906,11 +1917,11 @@ function refreshAll() {
   searchQuery = '';
   filterGender = '';
   filterMonth = '';
-  filterGroup = 'เพื่อน';
+  filterGroup = '';
 
   document.getElementById('search-input').value = '';
   document.getElementById('filter-month').value = '';
-  document.getElementById('group-filter').value = 'เพื่อน';
+  document.getElementById('group-filter').selectedIndex = 0;
 
   if (filterGenderInput) {
     filterGenderInput.value = '';

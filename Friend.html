@@ -1320,80 +1320,64 @@ async function previewImage(input) {
       document.querySelector('.image-upload-container').classList.remove('has-image');
     }
 
-    async function loadMembers() {
-      const loadingState = document.getElementById('loading-state');
-      const emptyState = document.getElementById('empty-state');
-      const membersContainer = document.getElementById('members-container');
-      const stats = document.getElementById('stats');
-      const noSearchResults = document.getElementById('no-search-results');
+    // 1. แก้ไขฟังก์ชันโหลดข้อมูล (โหลดมาแล้วกรองเอาเฉพาะกลุ่มเพื่อนทันที)
+async function loadMembers() {
+  const loadingState = document.getElementById('loading-state');
+  const emptyState = document.getElementById('empty-state');
+  const memberList = document.getElementById('member-list');
+  const searchInfo = document.getElementById('search-info');
 
-      loadingState.classList.remove('hidden');
-      emptyState.classList.add('hidden');
-      membersContainer.classList.add('hidden');
-      stats.classList.add('hidden');
-      noSearchResults.classList.add('hidden');
+  loadingState.classList.remove('hidden');
+  emptyState.classList.add('hidden');
+  memberList.innerHTML = '';
+  searchInfo.classList.add('hidden');
 
-      try {
-        const response = await fetch(`${API_URL}?action=read`);
-        const text = await response.text();
-        
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (parseError) {
-          console.error('JSON parse error:', parseError);
-          loadingState.classList.add('hidden');
-          emptyState.classList.remove('hidden');
-          return;
-        }
+  try {
+    const response = await data_sdk.list('members');
+    // แก้ไขบรรทัดนี้: กรองให้เหลือเฉพาะกลุ่ม "เพื่อน" ตั้งแต่ต้น
+    allMembers = response.filter(m => m.group === "เพื่อน"); 
 
-        loadingState.classList.add('hidden');
-
-        if (data.status === 'success' && data.data && data.data.length > 0) {
-          members = data.data;
-          searchQuery = '';
-          filterGender = '';
-          filterMonth = '';
-          document.getElementById('search-input').value = '';
-          filterGenderInput.value = '';
-          filterGenderDisplay.textContent = 'ทั้งหมด';
-          document.getElementById('filter-month').value = '';
-          document.getElementById('clear-search-btn').classList.add('hidden');
-          document.getElementById('search-info').classList.add('hidden');
-          document.getElementById('filter-info').classList.add('hidden');
-          renderMembers();
-          membersContainer.classList.remove('hidden');
-          stats.classList.remove('hidden');
-          document.getElementById('total-members').textContent = members.length;
-          document.getElementById('search-stats').classList.add('hidden');
-        } else {
-          emptyState.classList.remove('hidden');
-          members = [];
-        }
-      } catch (error) {
-        console.error('Error loading members:', error);
-        loadingState.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-      }
+    if (allMembers.length === 0) {
+      emptyState.classList.remove('hidden');
+    } else {
+      filterMembers(); // แสดงผลเฉพาะกลุ่มเพื่อนที่กรองมาแล้ว
     }
+  } catch (error) {
+    console.error('Error loading members:', error);
+    showToast('❌ ไม่สามารถโหลดข้อมูลได้', 'error');
+  } finally {
+    loadingState.classList.add('hidden');
+  }
+}
 
-    function filterMembers() {
-      const searchInput = document.getElementById('search-input');
-      searchQuery = searchInput.value.trim().toLowerCase();
-      filterGender = filterGenderInput.value;
-      filterMonth = document.getElementById('filter-month').value;
-      filterGroup = document.getElementById('group-filter').value;
-      
-      if (searchQuery.length > 0) {
-        document.getElementById('clear-search-btn').classList.remove('hidden');
-      } else {
-        document.getElementById('clear-search-btn').classList.add('hidden');
-      }
+// 2. แก้ไขฟังก์ชันการกรอง (เพื่อให้การค้นหาหรือกรองเพศ/เดือน ทำงานภายใต้กลุ่มเพื่อนเท่านั้น)
+function filterMembers() {
+  const searchInput = document.getElementById('search-input');
+  const searchQuery = searchInput.value.toLowerCase();
+  const filterGender = document.getElementById('filter-gender').value;
+  const filterMonth = document.getElementById('filter-month').value;
+  
+  // บังคับให้ filterGroup เป็น "เพื่อน" เสมอ ไม่ว่า User จะเลือกอะไรในหน้าเว็บ
+  const filterGroup = "เพื่อน"; 
 
-      updateFilterInfo();
-      renderMembers();
-    }
+  let filtered = allMembers.filter(member => {
+    const matchesSearch = !searchQuery || 
+                          (member.firstName && member.firstName.toLowerCase().includes(searchQuery)) || 
+                          (member.lastName && member.lastName.toLowerCase().includes(searchQuery)) ||
+                          (member.nickname && member.nickname.toLowerCase().includes(searchQuery));
+    
+    const matchesGender = !filterGender || member.gender === filterGender;
+    const matchesMonth = !filterMonth || (member.birthday && new Date(member.birthday).getMonth() + 1 === parseInt(filterMonth));
+    
+    // ตรวจสอบว่าเป็นกลุ่มเพื่อนเท่านั้น
+    const matchesGroup = member.group === filterGroup; 
 
+    return matchesSearch && matchesGender && matchesMonth && matchesGroup;
+  });
+
+  renderMembers(filtered);
+}
+    
     function updateFilterInfo() {
       const filterInfo = document.getElementById('filter-info');
       const activeFilters = document.getElementById('active-filters');

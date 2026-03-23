@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="th" class="h-full">
  <head>
@@ -1355,10 +1354,13 @@ async function previewImage(input) {
           searchQuery = '';
           filterGender = '';
           filterMonth = '';
+          filterGroup = 'เพื่อน';
           document.getElementById('search-input').value = '';
           filterGenderInput.value = '';
           filterGenderDisplay.textContent = 'ทั้งหมด';
           document.getElementById('filter-month').value = '';
+          const groupFilterEl = document.getElementById('group-filter');
+          if (groupFilterEl) groupFilterEl.value = 'เพื่อน';
           document.getElementById('clear-search-btn').classList.add('hidden');
           document.getElementById('search-info').classList.add('hidden');
           document.getElementById('filter-info').classList.add('hidden');
@@ -1914,11 +1916,12 @@ function refreshAll() {
   searchQuery = '';
   filterGender = '';
   filterMonth = '';
-  filterGroup = '';
+  filterGroup = 'เพื่อน';
 
   document.getElementById('search-input').value = '';
   document.getElementById('filter-month').value = '';
-  document.getElementById('group-filter').selectedIndex = 0;
+  const groupFilterEl = document.getElementById('group-filter');
+  if (groupFilterEl) groupFilterEl.value = 'เพื่อน';
 
   if (filterGenderInput) {
     filterGenderInput.value = '';
@@ -1949,7 +1952,3 @@ changeGroupColor('group');
   
 </body>
 </html>
-
-
-
-
